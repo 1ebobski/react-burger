@@ -1,0 +1,34 @@
+.header {
+  height: 88px;
+  position: relative;
+}
+
+.navigation {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  border: 1px dashed #4c4cff;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+
+  border-radius: 40px;
+
+  border: 1px dashed #4c4cff;
+}
+
+.logo {
+  position: absolute;
+  left: calc(50% - 145px);
+}
+
+.tab:last-child {
+  margin-left: auto;
+
+  border: 1px dashed #4c4cff;
+}

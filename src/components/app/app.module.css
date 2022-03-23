@@ -1,0 +1,25 @@
+.app {
+  color: #f2f2f2;
+  background-color: #131316;
+
+  margin: 0 auto;
+
+  border: 1px dashed #4c4cff;
+  box-sizing: border-box;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  max-width: 1280px;
+  border: 1px dashed #4c4cff;
+  margin: 0 auto;
+}
+
+@media (max-width: 1023px) {
+  .main {
+    flex-direction: column;
+  }
+}
+
+/*remember: padding: calc(100% * 17 / 25 + 16px) 16px 16px;*/

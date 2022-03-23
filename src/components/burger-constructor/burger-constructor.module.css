@@ -1,0 +1,22 @@
+.section {
+  width: 600px;
+
+  border: 1px dashed #4c4cff;
+}
+
+.container {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 720px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
