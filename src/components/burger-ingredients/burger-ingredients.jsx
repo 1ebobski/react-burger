@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "../ingredient/ingredient";
@@ -30,51 +31,72 @@ function BurgerIngredients({ data }) {
           </Tab>
         </nav>
       </header>
-      <section>
-        <h2 className='mt-10 mb-6'>Булки</h2>
+      <div className={burgerIngredientsStyles.scroll}>
+        <section>
+          <h2 className='mt-10 mb-6'>Булки</h2>
 
-        <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
-          {bunsData.map((ingredient) => (
-            <Ingredient
-              name={ingredient.name}
-              price={ingredient.price}
-              image={ingredient.image}
-              key={ingredient.id}
-              containerType={containerType}
-            />
-          ))}
-        </div>
-      </section>
-      <section>
-        <h2 className={"mt-10 mb-6"}>Соусы</h2>
-        <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
-          {sauceData.map((ingredient) => (
-            <Ingredient
-              name={ingredient.name}
-              price={ingredient.price}
-              image={ingredient.image}
-              key={ingredient.id}
-              containerType={containerType}
-            />
-          ))}
-        </div>
-      </section>
-      <section>
-        <h2 className='mt-10 mb-6'>Начинки</h2>
-        <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
-          {mainData.map((ingredient) => (
-            <Ingredient
-              name={ingredient.name}
-              price={ingredient.price}
-              image={ingredient.image}
-              key={ingredient.id}
-              containerType={containerType}
-            />
-          ))}
-        </div>
-      </section>
+          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+            {bunsData.map((ingredient) => (
+              <Ingredient
+                name={ingredient.name}
+                price={ingredient.price}
+                image={ingredient.image}
+                key={ingredient.id}
+                containerType={containerType}
+              />
+            ))}
+          </div>
+        </section>
+        <section>
+          <h2 className={"mt-10 mb-6"}>Соусы</h2>
+          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+            {sauceData.map((ingredient) => (
+              <Ingredient
+                name={ingredient.name}
+                price={ingredient.price}
+                image={ingredient.image}
+                key={ingredient.id}
+                containerType={containerType}
+              />
+            ))}
+          </div>
+        </section>
+        <section>
+          <h2 className='mt-10 mb-6'>Начинки</h2>
+          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+            {mainData.map((ingredient) => (
+              <Ingredient
+                name={ingredient.name}
+                price={ingredient.price}
+                image={ingredient.image}
+                key={ingredient.id}
+                containerType={containerType}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </section>
   );
 }
+
+BurgerIngredients.propTypes = {
+  arrayWithShape: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      proteins: PropTypes.number.isRequired,
+      fat: PropTypes.number.isRequired,
+      carbohydrates: PropTypes.number.isRequired,
+      calories: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+      image_mobile: PropTypes.string.isRequired,
+      image_large: PropTypes.string.isRequired,
+      __v: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};
 
 export default BurgerIngredients;

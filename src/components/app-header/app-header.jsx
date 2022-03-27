@@ -11,7 +11,7 @@ import appHeaderStyles from "./app-header.module.css";
 
 function AppHeader() {
   return (
-    <header className={`mt-10 ${appHeaderStyles.header}`}>
+    <header className={`${appHeaderStyles.header}`}>
       <nav
         className={`text text_type_main-default ${appHeaderStyles.navigation}`}>
         <div

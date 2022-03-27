@@ -1,9 +1,7 @@
 .section {
-  width: 600px;
-  height: 912px;
-  overflow-y: scroll;
-
   border: 1px dashed #4c4cff;
+  width: 50%;
+  
 }
 
 .tabs {
@@ -13,15 +11,18 @@
 }
 
 .container {
-  /* display: grid;
-  grid-template-columns: 1fr 1fr; */
-
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-
   justify-content: space-between;
+
   border: 1px dashed #4c4cff;
 }
 
+.scroll {
+  overflow-y: scroll;
 
+  height: calc(35%);
+
+  border: 1px dashed #4c4cff;
+}

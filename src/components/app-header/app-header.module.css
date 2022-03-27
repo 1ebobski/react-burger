@@ -1,11 +1,16 @@
 .header {
   height: 88px;
-  position: relative;
+  width: 90%;
+
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .navigation {
-  max-width: 1280px;
-  margin: 0 auto;
+  /* max-width: 1280px; */
+  width: 100%;
+  /* margin: 0 auto; */
+
   display: flex;
   justify-content: flex-start;
   align-items: center;

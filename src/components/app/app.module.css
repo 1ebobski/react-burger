@@ -1,4 +1,8 @@
 .app {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
   color: #f2f2f2;
   background-color: #131316;
 
@@ -9,9 +13,13 @@
 }
 
 .main {
+  width: 90%;
+  max-width: 1240px;
+  
+
   display: flex;
-  justify-content: center;
-  max-width: 1280px;
+  justify-content: space-between;
+
   border: 1px dashed #4c4cff;
   margin: 0 auto;
 }
@@ -20,6 +28,26 @@
   .main {
     flex-direction: column;
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #626293;
 }
 
 /*remember: padding: calc(100% * 17 / 25 + 16px) 16px 16px;*/
