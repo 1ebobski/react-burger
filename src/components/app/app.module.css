@@ -8,7 +8,7 @@
 
   margin: 0 auto;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
   box-sizing: border-box;
 }
 
@@ -20,7 +20,7 @@
   display: flex;
   justify-content: space-between;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
   margin: 0 auto;
 }
 

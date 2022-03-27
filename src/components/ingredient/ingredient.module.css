@@ -1,12 +1,12 @@
 .component {
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 
   display: flex;
   align-items: center;
 }
 
 .ingredient {
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 
   display: flex;
   align-items: center;
@@ -21,17 +21,17 @@
   width: 80px;
   height: 40px;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }
 
 .name {
   width: 254px;
   text-align: center;
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }
 
 .price {
   display: flex;
   align-items: center;
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }

@@ -15,7 +15,7 @@
   justify-content: flex-start;
   align-items: center;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }
 
 .tab {
@@ -24,7 +24,7 @@
 
   border-radius: 40px;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }
 
 .logo {
@@ -35,5 +35,5 @@
 .tab:last-child {
   margin-left: auto;
 
-  border: 1px dashed #4c4cff;
+  /* border: 1px dashed #4c4cff; */
 }

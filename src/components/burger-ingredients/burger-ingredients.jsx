@@ -13,20 +13,28 @@ function BurgerIngredients({ data }) {
 
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
-      <header style={{ border: "1px dashed #4C4CFF" }}>
+      <header 
+      // style={{ border: "1px dashed #4C4CFF" }}
+      >
         <h1
-          style={{ border: "1px dashed #4C4CFF" }}
+          // style={{ border: "1px dashed #4C4CFF" }}
           className='mt-10 mb-5 text text_type_main-large'>
           Соберите бургер
         </h1>
         <nav className={burgerIngredientsStyles.tabs}>
-          <Tab style={{ border: "1px dashed #4C4CFF" }} value='buns' active>
+          <Tab 
+          // style={{ border: "1px dashed #4C4CFF" }} 
+          value='buns' active>
             Булки
           </Tab>
-          <Tab style={{ border: "1px dashed #4C4CFF" }} value='souce'>
+          <Tab 
+          // style={{ border: "1px dashed #4C4CFF" }} 
+          value='souce'>
             Соусы
           </Tab>
-          <Tab style={{ border: "1px dashed #4C4CFF" }} value='fill'>
+          <Tab 
+          // style={{ border: "1px dashed #4C4CFF" }} 
+          value='fill'>
             Начинки
           </Tab>
         </nav>
