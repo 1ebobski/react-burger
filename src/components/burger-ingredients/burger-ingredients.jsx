@@ -1,19 +1,20 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import burgerIngredientsStyles from "./burger-ingredients.module.css";
+import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
 
-function BurgerIngredients({ data }) {
-  const bunsData = data.filter((ingredient) => ingredient.type === "bun");
-  const mainData = data.filter((ingredient) => ingredient.type === "main");
-  const sauceData = data.filter((ingredient) => ingredient.type === "sauce");
-
-  const containerType = "ingredients";
+export default function BurgerIngredients(props) {
+  const bunData = props.data.filter((ingredient) => ingredient.type === "bun");
+  const mainData = props.data.filter(
+    (ingredient) => ingredient.type === "main"
+  );
+  const sauceData = props.data.filter(
+    (ingredient) => ingredient.type === "sauce"
+  );
 
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
-      <header 
+      <header
       // style={{ border: "1px dashed #4C4CFF" }}
       >
         <h1
@@ -22,19 +23,20 @@ function BurgerIngredients({ data }) {
           Соберите бургер
         </h1>
         <nav className={burgerIngredientsStyles.tabs}>
-          <Tab 
-          // style={{ border: "1px dashed #4C4CFF" }} 
-          value='buns' active>
+          <Tab
+            // style={{ border: "1px dashed #4C4CFF" }}
+            value='buns'
+            active>
             Булки
           </Tab>
-          <Tab 
-          // style={{ border: "1px dashed #4C4CFF" }} 
-          value='souce'>
+          <Tab
+            // style={{ border: "1px dashed #4C4CFF" }}
+            value='souce'>
             Соусы
           </Tab>
-          <Tab 
-          // style={{ border: "1px dashed #4C4CFF" }} 
-          value='fill'>
+          <Tab
+            // style={{ border: "1px dashed #4C4CFF" }}
+            value='fill'>
             Начинки
           </Tab>
         </nav>
@@ -43,45 +45,41 @@ function BurgerIngredients({ data }) {
         <section>
           <h2 className='mt-10 mb-6'>Булки</h2>
 
-          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
-            {bunsData.map((ingredient) => (
+          <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+            {bunData.map((ingredient) => (
               <Ingredient
-                name={ingredient.name}
-                price={ingredient.price}
-                image={ingredient.image}
-                key={ingredient.id}
-                containerType={containerType}
+                {...ingredient}
+                handleClick={props.getIngredientId}
+                key={ingredient._id}
               />
             ))}
-          </div>
+          </ul>
         </section>
+
         <section>
           <h2 className={"mt-10 mb-6"}>Соусы</h2>
-          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+          <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {sauceData.map((ingredient) => (
               <Ingredient
-                name={ingredient.name}
-                price={ingredient.price}
-                image={ingredient.image}
-                key={ingredient.id}
-                containerType={containerType}
+                {...ingredient}
+                handleClick={props.getIngredientId}
+                key={ingredient._id}
               />
             ))}
-          </div>
+          </ul>
         </section>
+
         <section>
           <h2 className='mt-10 mb-6'>Начинки</h2>
-          <div className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
+          <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {mainData.map((ingredient) => (
               <Ingredient
-                name={ingredient.name}
-                price={ingredient.price}
-                image={ingredient.image}
-                key={ingredient.id}
-                containerType={containerType}
+                {...ingredient}
+                handleClick={props.BurgerIngredientsgetIngredientId}
+                key={ingredient._id}
               />
             ))}
-          </div>
+          </ul>
         </section>
       </div>
     </section>
@@ -89,7 +87,7 @@ function BurgerIngredients({ data }) {
 }
 
 BurgerIngredients.propTypes = {
-  arrayWithShape: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
@@ -105,6 +103,5 @@ BurgerIngredients.propTypes = {
       __v: PropTypes.number.isRequired,
     })
   ).isRequired,
+  getIngredientId: PropTypes.func.isRequired,
 };
-
-export default BurgerIngredients;

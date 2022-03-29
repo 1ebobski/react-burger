@@ -6,9 +6,11 @@ import App from "./components/app/app";
 import data from "./utils/data";
 // import reportWebVitals from './reportWebVitals';
 
+const url = "https://norma.nomoreparties.space/api/ingredients";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App data={data} />
+    <App url={url} />
   </React.StrictMode>,
   document.getElementById("root")
 );
