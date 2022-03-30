@@ -1,0 +1,39 @@
+.section {
+  composes: section from "../burger-ingredients/burger-ingredients.module.css";
+}
+
+.scroll {
+  display: grid;
+  grid-gap: 16px;
+
+  overflow: hidden;
+  overflow-y: scroll;
+  /* height: calc(25.5%); */
+  height: 464px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
+
+.subHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.subFooter {
+  composes: subHeader;
+}
+
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
