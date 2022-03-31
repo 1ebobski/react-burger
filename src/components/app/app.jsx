@@ -6,23 +6,22 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import ErrorBoundary from "../error-boundary/error-boundary";
 import appStyles from "./app.module.css";
 import Modal from "../modal/modal";
-import ModalOverlay from "../modal-overlay/modal-overlay";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import useOutsideAlerter from "../use-outside-alerter/use-outside-alerter";
 
 function App({ url }) {
   // useState
-  const [modal, setModal] = useState(false);
   const [data, setData] = useState(null);
   const [ingredientData, setIngredientData] = useState(null);
   const [orderId, setOrderId] = useState(null);
+  const [modal, setModal] = useState(false);
 
   // useEffect
   useEffect(() => getData(), []);
 
   // functions
   const handleClose = () => {
+    console.log("modal closed");
     setModal(false);
     setIngredientData(null);
     setOrderId(null);
@@ -44,9 +43,14 @@ function App({ url }) {
 
   const getData = () => {
     fetch(url)
-      .then((response) => response.json())
-      .then((response) => {
-        setData([...response.data]);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+      .then((res) => {
+        setData([...res.data]);
       })
       .catch((err) => console.log(err));
   };
@@ -61,25 +65,16 @@ function App({ url }) {
             <BurgerConstructor data={data} getOrderId={getOrderId} />
           </main>
         )}
-        {modal && (
-          <ModalOverlay handleClose={handleClose}>
-            {ingredientData && (
-              <Modal
-                handleClose={handleClose}
-                useOutsideAlerter={useOutsideAlerter}
-                type={"ingredient"}>
-                <IngredientDetails {...ingredientData} />
-              </Modal>
-            )}
-            {orderId && (
-              <Modal
-                handleClose={handleClose}
-                useOutsideAlerter={useOutsideAlerter}
-                type={"order"}>
-                <OrderDetails {...orderId} />
-              </Modal>
-            )}
-          </ModalOverlay>
+
+        {modal && ingredientData && (
+          <Modal handleClose={handleClose} type={"ingredient"}>
+            <IngredientDetails {...ingredientData} />
+          </Modal>
+        )}
+        {modal && orderId && (
+          <Modal handleClose={handleClose} type={"order"}>
+            <OrderDetails {...orderId} />
+          </Modal>
         )}
       </ErrorBoundary>
     </div>

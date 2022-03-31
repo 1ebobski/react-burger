@@ -1,32 +1,47 @@
+import ReactDOM from "react-dom";
 import { useRef } from "react";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import ModalOverlay from "../modal-overlay/modal-overlay";
+
 import modalStyles from "./modal.module.css";
 import PropTypes from "prop-types";
+import { useEffect, useCallback } from "react";
+
+const modalRoot = document.getElementById("react-modals");
 
 export default function Modal(props) {
-  const wrapperRef = useRef(null);
-  props.useOutsideAlerter(wrapperRef, props.handleClose);
-  return (
-    <div
-      className={`${props.type === "ingredient" ? "pb-15" : "pb-30"} ${
-        modalStyles.modal
-      }`}
-      ref={wrapperRef}>
-      {props.type === "ingredient" ? (
-        <h1 className={`text text_type_main-large  ${modalStyles.header}`}>
-          Детали ингредиента
-        </h1>
-      ) : null}
-      <div className={modalStyles.close} onClick={props.handleClose}>
-        <CloseIcon type='primary' />
-      </div>
-      <div className={modalStyles.container}>{props.children}</div>
-    </div>
+  const escFunction = useCallback((event) => {
+    if (event.key === "Escape") {
+      props.handleClose();
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
+  return ReactDOM.createPortal(
+    <div className={`p-10 ${modalStyles.modal}`}>
+      <header className={modalStyles.header}>
+        {props.type === "ingredient" ? (
+          <h1 className={`text text_type_main-large  ${modalStyles.title}`}>
+            {props.type === "ingredient" ? "Детали ингредиента" : null}
+          </h1>
+        ) : null}
+
+        <CloseIcon type='primary' onClick={props.handleClose} />
+      </header>
+      {props.children}
+      <ModalOverlay handleClose={props.handleClose} />
+    </div>,
+    modalRoot
   );
 }
 
 Modal.propTypes = {
   handleClose: PropTypes.func.isRequired,
-  useOutsideAlerter: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
 };

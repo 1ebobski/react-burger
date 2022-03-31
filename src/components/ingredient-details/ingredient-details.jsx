@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 
 export default function IngredientDetails(props) {
   return (
-    <>
-      <img src={props.image_large} className={`mt-20`}></img>
+    <div className={ingredientDetailsStyles.container}>
+      <img src={props.image_large}></img>
       <span className='text text_type_main-medium mb-8 mt-4'>{props.name}</span>
-      <ul className={ingredientDetailsStyles.container}>
+      <ul className={ingredientDetailsStyles.nutrition}>
         {[
           { name: "Калории,ккал", value: props.calories },
           { name: "Белки, г", value: props.proteins },
           { name: "Жиры, г", value: props.fat },
           { name: "Углеводы, г", value: props.carbohydrates },
         ].map((data, index) => (
-          <li className={ingredientDetailsStyles.nutrition} key={index}>
+          <li className={ingredientDetailsStyles.nutrient} key={index}>
             <span
               className={`text text_type_main-default ${ingredientDetailsStyles.text}`}>
               {data.name}
@@ -25,7 +25,7 @@ export default function IngredientDetails(props) {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
 

@@ -28,7 +28,7 @@ export default function BurgerConstructor(props) {
         />
       </header>
       <div className={`p-4 ${burgerConstructorStyles.scroll}`}>
-        {mainData.map((ingredient) => (
+        {mainData.concat(sauceData).map((ingredient) => (
           <li
             className={burgerConstructorStyles.ingredient}
             key={ingredient._id}>

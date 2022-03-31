@@ -20,7 +20,7 @@ export default function OrderDetails(props) {
         Ваш заказ начали готовить
       </span>
       <span
-        className={`mt-2 text text_type_main-small ${orderDetailsStyles.wait}`}>
+        className={`mt-2 mb-20 text text_type_main-small ${orderDetailsStyles.wait}`}>
         Дождитесь готовности на орбитальной станции
       </span>
     </>
