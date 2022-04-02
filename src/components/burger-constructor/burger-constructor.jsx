@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -7,31 +7,37 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
+import { DataContext } from "../../services/dataContext";
+import { OrderContext } from "../../services/orderContext";
 
 export default function BurgerConstructor(props) {
-  const bunData = props.data.filter((ingredient) => ingredient.type === "bun");
-  const mainData = props.data.filter(
-    (ingredient) => ingredient.type === "main"
-  );
-  const sauceData = props.data.filter(
-    (ingredient) => ingredient.type === "sauce"
-  );
+  const { data } = useContext(DataContext);
+  const { orderState } = useContext(OrderContext);
+
+  useEffect(() => {
+    console.log(orderState);
+  }, [orderState]);
+
+  const bunData = data.filter((ingredient) => ingredient.type === "bun");
+  const mainData = data.filter((ingredient) => ingredient.type === "main");
+  const sauceData = data.filter((ingredient) => ingredient.type === "sauce");
+
   return (
     <section className={`ml-5 pt-20 ${burgerConstructorStyles.section}`}>
       <header className={`pr-6 ${burgerConstructorStyles.subHeader}`}>
         <ConstructorElement
           type={"top"}
           isLocked={true}
-          text={`${bunData[0].name} (верх)`}
+          text={`${orderState.content.bun.name} (верх)`}
           price={200}
-          thumbnail={bunData[0].image_mobile}
+          thumbnail={orderState.content.bun.image_mobile}
         />
       </header>
       <div className={`p-4 ${burgerConstructorStyles.scroll}`}>
-        {mainData.concat(sauceData).map((ingredient) => (
+        {orderState.content.filling.map((ingredient, index) => (
           <li
             className={burgerConstructorStyles.ingredient}
-            key={ingredient._id}>
+            key={index}>
             <DragIcon className='mr-2' />
             <ConstructorElement
               text={ingredient.name}
@@ -45,9 +51,9 @@ export default function BurgerConstructor(props) {
         <ConstructorElement
           type={"bottom"}
           isLocked={true}
-          text={`${bunData[0].name} (низ)`}
+          text={`${orderState.content.bun.name} (низ)`}
           price={200}
-          thumbnail={bunData[0].image_mobile}
+          thumbnail={orderState.content.bun.image_mobile}
         />
       </footer>
 
@@ -67,20 +73,5 @@ export default function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ).isRequired,
+  getOrderId: PropTypes.func.isRequired,
 };

@@ -2,15 +2,14 @@ import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
+import { useContext } from "react";
+import { DataContext } from "../../services/dataContext";
 
 export default function BurgerIngredients(props) {
-  const bunData = props.data.filter((ingredient) => ingredient.type === "bun");
-  const mainData = props.data.filter(
-    (ingredient) => ingredient.type === "main"
-  );
-  const sauceData = props.data.filter(
-    (ingredient) => ingredient.type === "sauce"
-  );
+  const { data } = useContext(DataContext);
+  const bunData = data.filter((ingredient) => ingredient.type === "bun");
+  const mainData = data.filter((ingredient) => ingredient.type === "main");
+  const sauceData = data.filter((ingredient) => ingredient.type === "sauce");
 
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
@@ -87,21 +86,5 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      proteins: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
-      carbohydrates: PropTypes.number.isRequired,
-      calories: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      image_mobile: PropTypes.string.isRequired,
-      image_large: PropTypes.string.isRequired,
-      __v: PropTypes.number.isRequired,
-    })
-  ).isRequired,
   getIngredientId: PropTypes.func.isRequired,
 };
