@@ -1,7 +1,6 @@
 import orderDetailsStyles from "./order-details.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import { OrderContext } from "../../services/orderContext";
+import { OrderContext } from "../../services/order-context";
 import { useContext } from "react";
 
 export default function OrderDetails() {

@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -7,14 +7,20 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import { OrderContext } from "../../services/orderContext";
+import { OrderContext } from "../../services/order-context";
 
-export default function BurgerConstructor(props) {
+export default function BurgerConstructor({ createOrder }) {
   const { orderState } = useContext(OrderContext);
 
-  // useEffect(() => {
-  //   console.log(orderState);
-  // }, [orderState]);
+  const calculateOrderPrice = useMemo(
+    () =>
+      orderState.content.filling.reduce(
+        (sum, ingredient) => sum + ingredient.price,
+        0
+      ) +
+      orderState.content.bun.price * 2,
+    [orderState.content]
+  );
 
   return (
     <section className={`ml-5 pt-20 ${burgerConstructorStyles.section}`}>
@@ -52,11 +58,11 @@ export default function BurgerConstructor(props) {
       <footer className={`pt-10 pb-13 ${burgerConstructorStyles.footer}`}>
         <div className={`mr-10 ${burgerConstructorStyles.price}`}>
           <span className='text text_type_digits-medium mr-2'>
-            {orderState.price}
+            {calculateOrderPrice}
           </span>
           <CurrencyIcon type='primary' />
         </div>
-        <Button type='primary' onClick={props.createOrder}>
+        <Button type='primary' onClick={createOrder}>
           Оформить заказ
         </Button>
       </footer>

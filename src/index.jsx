@@ -2,16 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/app/app";
-
-// import data from "./utils/data";
 // import reportWebVitals from './reportWebVitals';
-
-const dataUrl = "https://norma.nomoreparties.space/api/ingredients";
-const orderUrl = "https://norma.nomoreparties.space/api/orders";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App dataUrl={dataUrl} orderUrl={orderUrl} />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

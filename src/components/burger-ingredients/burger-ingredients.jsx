@@ -3,9 +3,9 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
 import { useContext } from "react";
-import { DataContext } from "../../services/dataContext";
+import { DataContext } from "../../services/data-context";
 
-export default function BurgerIngredients(props) {
+export default function BurgerIngredients({ openIngredientModal }) {
   const { data } = useContext(DataContext);
   const bunData = data.filter((ingredient) => ingredient.type === "bun");
   const mainData = data.filter((ingredient) => ingredient.type === "main");
@@ -13,31 +13,16 @@ export default function BurgerIngredients(props) {
 
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
-      <header
-      // style={{ border: "1px dashed #4C4CFF" }}
-      >
-        <h1
-          // style={{ border: "1px dashed #4C4CFF" }}
-          className='mt-10 mb-5 text text_type_main-large'>
+      <header>
+        <h1 className='mt-10 mb-5 text text_type_main-large'>
           Соберите бургер
         </h1>
         <nav className={burgerIngredientsStyles.tabs}>
-          <Tab
-            // style={{ border: "1px dashed #4C4CFF" }}
-            value='buns'
-            active>
+          <Tab value='buns' active>
             Булки
           </Tab>
-          <Tab
-            // style={{ border: "1px dashed #4C4CFF" }}
-            value='souce'>
-            Соусы
-          </Tab>
-          <Tab
-            // style={{ border: "1px dashed #4C4CFF" }}
-            value='fill'>
-            Начинки
-          </Tab>
+          <Tab value='souce'>Соусы</Tab>
+          <Tab value='fill'>Начинки</Tab>
         </nav>
       </header>
       <div className={burgerIngredientsStyles.scroll}>
@@ -48,7 +33,7 @@ export default function BurgerIngredients(props) {
             {bunData.map((ingredient) => (
               <Ingredient
                 {...ingredient}
-                handleClick={props.getIngredientId}
+                handleClick={openIngredientModal}
                 key={ingredient._id}
               />
             ))}
@@ -61,7 +46,7 @@ export default function BurgerIngredients(props) {
             {sauceData.map((ingredient) => (
               <Ingredient
                 {...ingredient}
-                handleClick={props.getIngredientId}
+                handleClick={openIngredientModal}
                 key={ingredient._id}
               />
             ))}
@@ -74,7 +59,7 @@ export default function BurgerIngredients(props) {
             {mainData.map((ingredient) => (
               <Ingredient
                 {...ingredient}
-                handleClick={props.BurgerIngredientsgetIngredientId}
+                handleClick={openIngredientModal}
                 key={ingredient._id}
               />
             ))}
@@ -86,5 +71,5 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  getIngredientId: PropTypes.func.isRequired,
+  openIngredientModal: PropTypes.func.isRequired,
 };

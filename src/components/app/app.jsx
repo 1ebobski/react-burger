@@ -1,5 +1,4 @@
-import { useEffect, useState, useReducer } from "react";
-import PropTypes from "prop-types";
+import { useEffect, useState, useReducer, useMemo } from "react";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -8,46 +7,40 @@ import appStyles from "./app.module.css";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import { DataContext } from "../../services/dataContext";
-import { OrderContext } from "../../services/orderContext";
+import { DataContext } from "../../services/data-context";
+import { OrderContext } from "../../services/order-context";
+import { initialOrderState, orderReducer } from "../../utils/order-reducer";
+import { apiUrl } from "../../constants/api";
 
-const initialOrderState = { content: null, id: undefined };
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "reset":
-      return initialOrderState;
-    case "set-id":
-      return {
-        ...state,
-        id: action.id,
-      };
-    case "set-content":
-      return {
-        ...state,
-        content: {
-          bun: action.content.bun,
-          filling: [...action.content.filling],
-        },
-      };
-    case "set-price":
-      return { ...state, price: action.price };
-  }
-}
-
-function App({ dataUrl, orderUrl }) {
+function App() {
   // useState
   const [data, setData] = useState(null);
+
+  const dataStateValue = useMemo(
+    () => ({
+      data,
+      setData,
+    }),
+    [data, setData]
+  );
+
   const [ingredientData, setIngredientData] = useState(null);
   const [modal, setModal] = useState(false);
 
-  // const [order, setOrder] = useState({ id: undefined, content: [] });
+  // useReducer
+  const [orderState, orderDispatcher] = useReducer(
+    orderReducer,
+    initialOrderState
+  );
 
-  const [orderState, orderDispatcher] = useReducer(reducer, initialOrderState);
+  const orderStateValue = useMemo(
+    () => ({ orderState, orderDispatcher }),
+    [orderState, orderDispatcher]
+  );
 
   // useEffect
   useEffect(() => {
-    getData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -62,16 +55,6 @@ function App({ dataUrl, orderUrl }) {
       });
     }
   }, [data]);
-
-  useEffect(() => {
-    if (orderState.content) {
-      const orderPrice = calculateOrderPrice();
-      orderDispatcher({
-        type: "set-price",
-        price: orderPrice,
-      });
-    }
-  }, [orderState.content]);
 
   // functions
   const createRandomBurger = () => {
@@ -97,23 +80,19 @@ function App({ dataUrl, orderUrl }) {
     }
   };
 
-  const calculateOrderPrice = () => {
-    return (
-      orderState.content.filling.reduce(
-        (sum, ingredient) => sum + ingredient.price,
-        0
-      ) +
-      orderState.content.bun.price * 2
-    );
-  };
-
-  const handleModalClose = () => {
+  const closeOrderModal = (event) => {
+    event.preventDefault();
     setModal(false);
-    setIngredientData(null);
     orderDispatcher({ type: "reset" });
   };
 
-  const getIngredientId = (event, id) => {
+  const closeIngredientModal = (event) => {
+    event.preventDefault();
+    setModal(false);
+    setIngredientData(null);
+  };
+
+  const openIngredientModal = (event, id) => {
     event.preventDefault();
     setModal(true);
     setIngredientData(data.find((ingredient) => ingredient._id === id));
@@ -121,11 +100,16 @@ function App({ dataUrl, orderUrl }) {
 
   const createOrder = (event) => {
     event.preventDefault();
-    const ingredientIdArray = orderState.content.filling.map(
-      (ingredient) => ingredient._id
-    );
+    fetchOrderId(orderState);
+    setModal(true);
+  };
 
-    fetch(orderUrl, {
+  const fetchOrderId = (orderState) => {
+    const ingredientIdArray = orderState.content.filling
+      .concat(orderState.content.bun)
+      .map((ingredient) => ingredient._id);
+
+    fetch(apiUrl + "orders", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -145,12 +129,10 @@ function App({ dataUrl, orderUrl }) {
         orderDispatcher({ type: "set-id", id: res.order.number });
       })
       .catch((err) => console.log(`Ошибка номер ${err}`));
-
-    setModal(true);
   };
 
-  const getData = () => {
-    fetch(dataUrl)
+  const fetchData = () => {
+    fetch(apiUrl + "ingredients")
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -166,28 +148,27 @@ function App({ dataUrl, orderUrl }) {
   return (
     <div className={`pb-10 pt-10 ${appStyles.app}`}>
       <ErrorBoundary>
-        <DataContext.Provider value={{ data, setData }}>
-          <OrderContext.Provider value={{ orderState, orderDispatcher }}>
+        <DataContext.Provider value={dataStateValue}>
+          <OrderContext.Provider value={orderStateValue}>
             <AppHeader />
             {data && (
               <main className={`pl-5 pr-5 ${appStyles.main}`}>
-                <BurgerIngredients getIngredientId={getIngredientId} />
+                <BurgerIngredients openIngredientModal={openIngredientModal} />
                 {orderState.content && (
-                  <BurgerConstructor
-                    createOrder={createOrder}
-                    orderState={orderState}
-                  />
+                  <BurgerConstructor createOrder={createOrder} />
                 )}
               </main>
             )}
 
             {modal && ingredientData && (
-              <Modal handleModalClose={handleModalClose} type={"ingredient"}>
+              <Modal
+                handleClose={closeIngredientModal}
+                title={"Детали ингредиента"}>
                 <IngredientDetails {...ingredientData} />
               </Modal>
             )}
             {modal && orderState.id && (
-              <Modal handleModalClose={handleModalClose} type={"order"}>
+              <Modal handleClose={closeOrderModal}>
                 <OrderDetails />
               </Modal>
             )}
@@ -197,10 +178,5 @@ function App({ dataUrl, orderUrl }) {
     </div>
   );
 }
-
-App.propTypes = {
-  dataUrl: PropTypes.string.isRequired,
-  orderUrl: PropTypes.string.isRequired,
-};
 
 export default App;
