@@ -9,7 +9,7 @@ import {
 
 import appHeaderStyles from "./app-header.module.css";
 
-function AppHeader() {
+export default function AppHeader() {
   return (
     <header className={`${appHeaderStyles.header}`}>
       <nav
@@ -36,5 +36,3 @@ function AppHeader() {
     </header>
   );
 }
-
-export default AppHeader;

@@ -1,0 +1,23 @@
+.accepted {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background-image: url(../../images/accepted-background_1.svg),
+    url(../../images/accepted-background_2.svg),
+    url(../../images/accepted-background_3.svg);
+  background-position: center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+}
+
+.number {
+  color: #f2f2f3;
+
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25),
+    0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.wait {
+  color: #8585ad;
+}
