@@ -11,7 +11,7 @@ import OrderDetails from "../order-details/order-details";
 import { DataContext } from "../../services/dataContext";
 import { OrderContext } from "../../services/orderContext";
 
-const initialOrderState = { id: undefined, content: null };
+const initialOrderState = { content: null, id: undefined };
 
 function reducer(state, action) {
   switch (action.type) {
@@ -23,13 +23,19 @@ function reducer(state, action) {
         id: action.id,
       };
     case "set-content":
-      return { ...state, content: action.content };
-    // case "remove":
-    //   return { ...state, content: [...state.content, action.ingredient] };
+      return {
+        ...state,
+        content: {
+          bun: action.content.bun,
+          filling: [...action.content.filling],
+        },
+      };
+    case "set-price":
+      return { ...state, price: action.price };
   }
 }
 
-function App({ url }) {
+function App({ dataUrl, orderUrl }) {
   // useState
   const [data, setData] = useState(null);
   const [ingredientData, setIngredientData] = useState(null);
@@ -46,21 +52,29 @@ function App({ url }) {
 
   useEffect(() => {
     if (data) {
-      const randomContent = randomBurger();
-      console.log(randomContent);
+      const randomBurger = createRandomBurger();
       orderDispatcher({
         type: "set-content",
         content: {
-          bun: randomContent.bun,
-          filling: [...randomContent.filling],
+          bun: randomBurger.bun,
+          filling: [...randomBurger.filling],
         },
       });
-      // console.log(orderState);}
     }
   }, [data]);
 
+  useEffect(() => {
+    if (orderState.content) {
+      const orderPrice = calculateOrderPrice();
+      orderDispatcher({
+        type: "set-price",
+        price: orderPrice,
+      });
+    }
+  }, [orderState.content]);
+
   // functions
-  const randomBurger = () => {
+  const createRandomBurger = () => {
     if (data) {
       const bunData = data.filter((ingredient) => ingredient.type === "bun");
       const bun = bunData[Math.floor(Math.random() * bunData.length)];
@@ -72,7 +86,7 @@ function App({ url }) {
       let fillingArray = [];
       for (
         let i = 0;
-        i < 1 + Math.floor(Math.random() * mainAndSauceData.length);
+        i < 5 + Math.floor(Math.random() * mainAndSauceData.length);
         i++
       ) {
         fillingArray.push(
@@ -83,7 +97,17 @@ function App({ url }) {
     }
   };
 
-  const handleClose = () => {
+  const calculateOrderPrice = () => {
+    return (
+      orderState.content.filling.reduce(
+        (sum, ingredient) => sum + ingredient.price,
+        0
+      ) +
+      orderState.content.bun.price * 2
+    );
+  };
+
+  const handleModalClose = () => {
     setModal(false);
     setIngredientData(null);
     orderDispatcher({ type: "reset" });
@@ -95,14 +119,38 @@ function App({ url }) {
     setIngredientData(data.find((ingredient) => ingredient._id === id));
   };
 
-  const getOrderId = (event, id = "034536") => {
+  const createOrder = (event) => {
     event.preventDefault();
+    const ingredientIdArray = orderState.content.filling.map(
+      (ingredient) => ingredient._id
+    );
+
+    fetch(orderUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ingredients: ingredientIdArray,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+      .then((res) => {
+        orderDispatcher({ type: "set-id", id: res.order.number });
+      })
+      .catch((err) => console.log(`Ошибка номер ${err}`));
+
     setModal(true);
-    orderDispatcher({ type: "set-id", id: id });
   };
 
   const getData = () => {
-    fetch(url)
+    fetch(dataUrl)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -112,7 +160,7 @@ function App({ url }) {
       .then((res) => {
         setData([...res.data]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(`Ошибка номер ${err}`));
   };
 
   return (
@@ -120,29 +168,29 @@ function App({ url }) {
       <ErrorBoundary>
         <DataContext.Provider value={{ data, setData }}>
           <OrderContext.Provider value={{ orderState, orderDispatcher }}>
-          <AppHeader />
-          {data && (
-            <main className={`pl-5 pr-5 ${appStyles.main}`}>
-              <BurgerIngredients getIngredientId={getIngredientId} />
-              {orderState.content && (
-                <BurgerConstructor
-                  getOrderId={getOrderId}
-                  orderState={orderState}
-                />
-              )}
-            </main>
-          )}
+            <AppHeader />
+            {data && (
+              <main className={`pl-5 pr-5 ${appStyles.main}`}>
+                <BurgerIngredients getIngredientId={getIngredientId} />
+                {orderState.content && (
+                  <BurgerConstructor
+                    createOrder={createOrder}
+                    orderState={orderState}
+                  />
+                )}
+              </main>
+            )}
 
-          {modal && ingredientData && (
-            <Modal handleClose={handleClose} type={"ingredient"}>
-              <IngredientDetails {...ingredientData} />
-            </Modal>
-          )}
-          {modal && orderState.id && (
-            <Modal handleClose={handleClose} type={"order"}>
-              <OrderDetails id={orderState.id} />
-            </Modal>
-          )}
+            {modal && ingredientData && (
+              <Modal handleModalClose={handleModalClose} type={"ingredient"}>
+                <IngredientDetails {...ingredientData} />
+              </Modal>
+            )}
+            {modal && orderState.id && (
+              <Modal handleModalClose={handleModalClose} type={"order"}>
+                <OrderDetails />
+              </Modal>
+            )}
           </OrderContext.Provider>
         </DataContext.Provider>
       </ErrorBoundary>
@@ -150,6 +198,9 @@ function App({ url }) {
   );
 }
 
-App.propTypes = { url: PropTypes.string.isRequired };
+App.propTypes = {
+  dataUrl: PropTypes.string.isRequired,
+  orderUrl: PropTypes.string.isRequired,
+};
 
 export default App;

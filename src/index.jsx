@@ -3,14 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/app/app";
 
-import data from "./utils/data";
+// import data from "./utils/data";
 // import reportWebVitals from './reportWebVitals';
 
-const url = "https://norma.nomoreparties.space/api/ingredients";
+const dataUrl = "https://norma.nomoreparties.space/api/ingredients";
+const orderUrl = "https://norma.nomoreparties.space/api/orders";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App url={url} />
+    <App dataUrl={dataUrl} orderUrl={orderUrl} />
   </React.StrictMode>,
   document.getElementById("root")
 );

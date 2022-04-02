@@ -1,13 +1,16 @@
 import orderDetailsStyles from "./order-details.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { OrderContext } from "../../services/orderContext";
+import { useContext } from "react";
 
-export default function OrderDetails(props) {
+export default function OrderDetails() {
+  const { orderState } = useContext(OrderContext);
   return (
     <>
       <span
         className={`mt-30 text text_type_digits-large ${orderDetailsStyles.number}`}>
-        {props.id}
+        {orderState.id}
       </span>
       <span className={`mt-8 text text_type_main-medium`}>
         идентификатор заказа
@@ -26,5 +29,3 @@ export default function OrderDetails(props) {
     </>
   );
 }
-
-OrderDetails.propTypes = { id: PropTypes.string.isRequired };

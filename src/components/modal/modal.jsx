@@ -12,7 +12,7 @@ const modalRoot = document.getElementById("react-modals");
 export default function Modal(props) {
   const escFunction = useCallback((event) => {
     if (event.key === "Escape") {
-      props.handleClose();
+      props.handleModalClose();
     }
   }, []);
 
@@ -32,16 +32,16 @@ export default function Modal(props) {
           </h1>
         ) : null}
 
-        <CloseIcon type='primary' onClick={props.handleClose} />
+        <CloseIcon type='primary' onClick={props.handleModalClose} />
       </header>
       {props.children}
-      <ModalOverlay handleClose={props.handleClose} />
+      <ModalOverlay handleModalClose={props.handleModalClose} />
     </div>,
     modalRoot
   );
 }
 
 Modal.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  handleModalClose: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
 };
