@@ -1,15 +1,14 @@
 import orderDetailsStyles from "./order-details.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { OrderContext } from "../../services/order-context";
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 
 export default function OrderDetails() {
-  const { orderState } = useContext(OrderContext);
+  const { orderId } = useSelector((store) => store.orderData);
   return (
     <>
       <span
         className={`mt-30 text text_type_digits-large ${orderDetailsStyles.number}`}>
-        {orderState.id}
+        {orderId}
       </span>
       <span className={`mt-8 text text_type_main-medium`}>
         идентификатор заказа

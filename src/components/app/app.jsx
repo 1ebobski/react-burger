@@ -7,173 +7,123 @@ import appStyles from "./app.module.css";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import { DataContext } from "../../services/data-context";
-import { OrderContext } from "../../services/order-context";
-import { initialOrderState, orderReducer } from "../../utils/order-reducer";
-import { apiUrl } from "../../constants/api";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addIngredientDetails,
+  cleanIngredientDetails,
+} from "../../services/ingredient-details";
+import {
+  addIngredient,
+  cleanBurgerConstructor,
+} from "../../services/burger-constructor";
+import createRandomBurger from "../../utils/create-random-burger";
+import { fetchIngredientsData } from "../../services/ingredients-data";
+import {
+  fetchOrderId,
+  addOrderList,
+  cleanOrderData,
+} from "../../services/order-data";
 
 function App() {
-  // useState
-  const [data, setData] = useState(null);
+  const dispatch = useDispatch();
 
-  const dataStateValue = useMemo(
-    () => ({
-      data,
-      setData,
-    }),
-    [data, setData]
+  const { ingredients, ingredientsSuccess } = useSelector(
+    (store) => store.ingredientsData
   );
 
-  const [ingredientData, setIngredientData] = useState(null);
+  const ingredientDetails = useSelector(
+    (store) => store.ingredientDetails.details
+  );
+
+  const { orderId, orderSuccess, orderList } = useSelector(
+    (store) => store.orderData
+  );
+
+  // useEffect(() => {
+  //   console.log(orderId, orderSuccess, orderList);
+  // }, [orderId, orderSuccess]);
+
+  const { bun, filling } = useSelector((store) => store.burgerConstructor);
+
+  // const [data, setData] = useState(null);
+
+  // const dataStateValue = useMemo(
+  //   () => ({
+  //     data,
+  //     setData,
+  //   }),
+  //   [data, setData]
+  // );
+
   const [modal, setModal] = useState(false);
 
-  // useReducer
-  const [orderState, orderDispatcher] = useReducer(
-    orderReducer,
-    initialOrderState
-  );
-
-  const orderStateValue = useMemo(
-    () => ({ orderState, orderDispatcher }),
-    [orderState, orderDispatcher]
-  );
-
-  // useEffect
   useEffect(() => {
-    fetchData();
+    dispatch(fetchIngredientsData());
   }, []);
 
   useEffect(() => {
-    if (data) {
-      const randomBurger = createRandomBurger();
-      orderDispatcher({
-        type: "set-content",
-        content: {
-          bun: randomBurger.bun,
-          filling: [...randomBurger.filling],
-        },
-      });
+    if (ingredientsSuccess) {
+      const randomBurger = createRandomBurger(ingredients);
+      randomBurger.filling.forEach((ing) => dispatch(addIngredient(ing)));
     }
-  }, [data]);
+  }, [ingredients]);
 
-  // functions
-  const createRandomBurger = () => {
-    if (data) {
-      const bunData = data.filter((ingredient) => ingredient.type === "bun");
-      const bun = bunData[Math.floor(Math.random() * bunData.length)];
-
-      const mainAndSauceData = data.filter(
-        (ingredient) =>
-          ingredient.type === "main" || ingredient.type === "sauce"
-      );
-      let fillingArray = [];
-      for (
-        let i = 0;
-        i < 5 + Math.floor(Math.random() * mainAndSauceData.length);
-        i++
-      ) {
-        fillingArray.push(
-          mainAndSauceData[Math.floor(Math.random() * mainAndSauceData.length)]
-        );
-      }
-      return { bun: bun, filling: fillingArray };
-    }
+  const createOrder = (event) => {
+    event.preventDefault();
+    const orderList = filling.concat(bun).map((ingredient) => ingredient._id);
+    dispatch(addOrderList(orderList));
+    dispatch(fetchOrderId(orderList));
+    setModal(true);
   };
 
   const closeOrderModal = (event) => {
     event.preventDefault();
     setModal(false);
-    orderDispatcher({ type: "reset" });
-  };
-
-  const closeIngredientModal = (event) => {
-    event.preventDefault();
-    setModal(false);
-    setIngredientData(null);
+    dispatch(cleanOrderData());
+    dispatch(cleanBurgerConstructor());
   };
 
   const openIngredientModal = (event, id) => {
     event.preventDefault();
     setModal(true);
-    setIngredientData(data.find((ingredient) => ingredient._id === id));
+    dispatch(
+      addIngredientDetails(
+        ingredients.find((ingredient) => ingredient._id === id)
+      )
+    );
   };
 
-  const createOrder = (event) => {
+  const closeIngredientModal = (event) => {
     event.preventDefault();
-    fetchOrderId(orderState);
-    setModal(true);
-  };
-
-  const fetchOrderId = (orderState) => {
-    const ingredientIdArray = orderState.content.filling
-      .concat(orderState.content.bun)
-      .map((ingredient) => ingredient._id);
-
-    fetch(apiUrl + "orders", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ingredients: ingredientIdArray,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .then((res) => {
-        orderDispatcher({ type: "set-id", id: res.order.number });
-      })
-      .catch((err) => console.log(`Ошибка номер ${err}`));
-  };
-
-  const fetchData = () => {
-    fetch(apiUrl + "ingredients")
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .then((res) => {
-        setData([...res.data]);
-      })
-      .catch((err) => console.log(`Ошибка номер ${err}`));
+    setModal(false);
+    dispatch(cleanIngredientDetails());
   };
 
   return (
     <div className={`pb-10 pt-10 ${appStyles.app}`}>
       <ErrorBoundary>
-        <DataContext.Provider value={dataStateValue}>
-          <OrderContext.Provider value={orderStateValue}>
-            <AppHeader />
-            {data && (
-              <main className={`pl-5 pr-5 ${appStyles.main}`}>
-                <BurgerIngredients openIngredientModal={openIngredientModal} />
-                {orderState.content && (
-                  <BurgerConstructor createOrder={createOrder} />
-                )}
-              </main>
-            )}
+        <AppHeader />
 
-            {modal && ingredientData && (
-              <Modal
-                handleClose={closeIngredientModal}
-                title={"Детали ингредиента"}>
-                <IngredientDetails {...ingredientData} />
-              </Modal>
-            )}
-            {modal && orderState.id && (
-              <Modal handleClose={closeOrderModal}>
-                <OrderDetails />
-              </Modal>
-            )}
-          </OrderContext.Provider>
-        </DataContext.Provider>
+        <main className={`pl-5 pr-5 ${appStyles.main}`}>
+          {ingredientsSuccess && (
+            <BurgerIngredients openIngredientModal={openIngredientModal} />
+          )}
+          <BurgerConstructor createOrder={createOrder} />
+        </main>
+
+        {modal && ingredientDetails && (
+          <Modal
+            handleClose={closeIngredientModal}
+            title={"Детали ингредиента"}>
+            <IngredientDetails />
+          </Modal>
+        )}
+        {modal && orderSuccess && (
+          <Modal handleClose={closeOrderModal}>
+            <OrderDetails />
+          </Modal>
+        )}
       </ErrorBoundary>
     </div>
   );

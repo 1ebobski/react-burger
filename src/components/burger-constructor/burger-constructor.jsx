@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -7,19 +7,20 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import { OrderContext } from "../../services/order-context";
+import { useSelector } from "react-redux";
 
 export default function BurgerConstructor({ createOrder }) {
-  const { orderState } = useContext(OrderContext);
+  const { bun, filling } = useSelector((store) => store.burgerConstructor);
+
+    // useEffect(() => {
+    //   console.log(bun, filling);
+    // }, [bun, filling]);
 
   const calculateOrderPrice = useMemo(
     () =>
-      orderState.content.filling.reduce(
-        (sum, ingredient) => sum + ingredient.price,
-        0
-      ) +
-      orderState.content.bun.price * 2,
-    [orderState.content]
+      filling.reduce((sum, ingredient) => sum + ingredient.price, 0) +
+      bun.price * 2,
+    [bun, filling]
   );
 
   return (
@@ -28,13 +29,13 @@ export default function BurgerConstructor({ createOrder }) {
         <ConstructorElement
           type={"top"}
           isLocked={true}
-          text={`${orderState.content.bun.name} (верх)`}
-          price={orderState.content.bun.price}
-          thumbnail={orderState.content.bun.image_mobile}
+          text={`${bun.name} (верх)`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
       </header>
       <div className={`p-4 ${burgerConstructorStyles.scroll}`}>
-        {orderState.content.filling.map((ingredient, index) => (
+        {filling.map((ingredient, index) => (
           <li className={burgerConstructorStyles.ingredient} key={index}>
             <DragIcon className='mr-2' />
             <ConstructorElement
@@ -49,9 +50,9 @@ export default function BurgerConstructor({ createOrder }) {
         <ConstructorElement
           type={"bottom"}
           isLocked={true}
-          text={`${orderState.content.bun.name} (низ)`}
-          price={orderState.content.bun.price}
-          thumbnail={orderState.content.bun.image_mobile}
+          text={`${bun.name} (низ)`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
       </footer>
 

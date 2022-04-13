@@ -2,14 +2,18 @@ import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
-import { useContext } from "react";
-import { DataContext } from "../../services/data-context";
+import { useSelector } from "react-redux";
 
 export default function BurgerIngredients({ openIngredientModal }) {
-  const { data } = useContext(DataContext);
-  const bunData = data.filter((ingredient) => ingredient.type === "bun");
-  const mainData = data.filter((ingredient) => ingredient.type === "main");
-  const sauceData = data.filter((ingredient) => ingredient.type === "sauce");
+  const { ingredients } = useSelector((store) => store.ingredientsData);
+
+  const bunData = ingredients.filter((ingredient) => ingredient.type === "bun");
+  const mainData = ingredients.filter(
+    (ingredient) => ingredient.type === "main"
+  );
+  const sauceData = ingredients.filter(
+    (ingredient) => ingredient.type === "sauce"
+  );
 
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
