@@ -4,10 +4,10 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import App from "./components/app/app";
-import ingredientDetailsReducer from "./services/ingredient-details";
-import burgerConstructorReducer from "./services/burger-constructor";
-import ingredientsDataReducer from "./services/ingredients-data";
-import orderDataReducer from "./services/order-data";
+import ingredientReducer from "./services/ingredient";
+// import burgerConstructorReducer from "./services/burger-constructor";
+import burgerReducer from "./services/burger";
+import orderReducer from "./services/order";
 import BurgerApi from "./utils/burger-api";
 import {
   BURGER_API_URL,
@@ -33,10 +33,10 @@ const burgerApi = new BurgerApi({
 
 const store = configureStore({
   reducer: {
-    ingredientDetails: ingredientDetailsReducer,
-    burgerConstructor: burgerConstructorReducer,
-    ingredientsData: ingredientsDataReducer,
-    orderData: orderDataReducer,
+    ingredient: ingredientReducer,
+    // burgerConstructor: burgerConstructorReducer,
+    burger: burgerReducer,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

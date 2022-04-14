@@ -3,8 +3,13 @@
 }
 
 .scroll {
-  display: grid;
-  grid-gap: 16px;
+  /* display: grid;
+  align-items: start;
+  grid-gap: 16px; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   overflow: hidden;
   overflow-y: scroll;

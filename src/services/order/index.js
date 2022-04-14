@@ -10,8 +10,8 @@ export const fetchOrderId = createAsyncThunk(
   }
 );
 
-const orderDataSlice = createSlice({
-  name: "order-data",
+const orderSlice = createSlice({
+  name: "order",
   initialState: {
     orderList: [],
     orderId: "",
@@ -47,6 +47,6 @@ const orderDataSlice = createSlice({
   },
 });
 
-const { actions, reducer } = orderDataSlice;
+const { actions, reducer } = orderSlice;
 export const { addOrderList, cleanOrderData } = actions;
 export default reducer;

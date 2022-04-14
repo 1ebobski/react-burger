@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 export default function IngredientDetails() {
   const { image_large, name, calories, proteins, fat, carbohydrates } =
-    useSelector((store) => store.ingredientDetails.details);
+    useSelector((store) => store.ingredient.details);
 
   return (
     <div className={ingredientDetailsStyles.container}>

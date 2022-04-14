@@ -3,9 +3,12 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
 import { useSelector } from "react-redux";
+import { useDrag } from "react-dnd";
 
 export default function BurgerIngredients({ openIngredientModal }) {
-  const { ingredients } = useSelector((store) => store.ingredientsData);
+  const { ingredients } = useSelector((store) => store.burger);
+
+  
 
   const bunData = ingredients.filter((ingredient) => ingredient.type === "bun");
   const mainData = ingredients.filter(

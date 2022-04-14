@@ -7,44 +7,40 @@ import appStyles from "./app.module.css";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-
 import { useDispatch, useSelector } from "react-redux";
+import createRandomBurger from "../../utils/create-random-burger";
 import {
   addIngredientDetails,
   cleanIngredientDetails,
-} from "../../services/ingredient-details";
+} from "../../services/ingredient";
+
 import {
   addIngredient,
+  addBun,
   cleanBurgerConstructor,
-} from "../../services/burger-constructor";
-import createRandomBurger from "../../utils/create-random-burger";
-import { fetchIngredientsData } from "../../services/ingredients-data";
+  fetchBurgerIngredients,
+  deleteIngredient,
+} from "../../services/burger";
 import {
   fetchOrderId,
   addOrderList,
   cleanOrderData,
-} from "../../services/order-data";
+} from "../../services/order";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const dispatch = useDispatch();
 
   const { ingredients, ingredientsSuccess } = useSelector(
-    (store) => store.ingredientsData
+    (store) => store.burger
   );
 
-  const ingredientDetails = useSelector(
-    (store) => store.ingredientDetails.details
-  );
+  const ingredientDetails = useSelector((store) => store.ingredient.details);
 
-  const { orderId, orderSuccess, orderList } = useSelector(
-    (store) => store.orderData
-  );
+  const { orderSuccess } = useSelector((store) => store.order);
 
-  // useEffect(() => {
-  //   console.log(orderId, orderSuccess, orderList);
-  // }, [orderId, orderSuccess]);
-
-  const { bun, filling } = useSelector((store) => store.burgerConstructor);
+  const { burgerBun, burgerFilling } = useSelector((store) => store.burger);
 
   // const [data, setData] = useState(null);
 
@@ -59,19 +55,34 @@ function App() {
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchIngredientsData());
+    dispatch(fetchBurgerIngredients());
   }, []);
 
-  useEffect(() => {
-    if (ingredientsSuccess) {
-      const randomBurger = createRandomBurger(ingredients);
-      randomBurger.filling.forEach((ing) => dispatch(addIngredient(ing)));
+  const handleDrop = (droppedIngredient) => {
+    const ingredient = ingredients.find(
+      (ing) => ing._id === droppedIngredient._id
+    );
+    switch (ingredient.type) {
+      case "bun":
+        dispatch(addBun({ bun: ingredient }));
+        break;
+      case "main":
+      case "sauce":
+        dispatch(addIngredient({ filling: ingredient }));
+        break;
     }
-  }, [ingredients]);
+  };
+
+  const handleDelete = (event, id, index) => {
+    event.preventDefault();
+    dispatch(deleteIngredient({ id, index }));
+  };
 
   const createOrder = (event) => {
     event.preventDefault();
-    const orderList = filling.concat(bun).map((ingredient) => ingredient._id);
+    const orderList = burgerFilling
+      .concat(burgerBun)
+      .map((ingredient) => ingredient._id);
     dispatch(addOrderList(orderList));
     dispatch(fetchOrderId(orderList));
     setModal(true);
@@ -104,14 +115,18 @@ function App() {
     <div className={`pb-10 pt-10 ${appStyles.app}`}>
       <ErrorBoundary>
         <AppHeader />
-
-        <main className={`pl-5 pr-5 ${appStyles.main}`}>
+        <DndProvider backend={HTML5Backend}>
           {ingredientsSuccess && (
-            <BurgerIngredients openIngredientModal={openIngredientModal} />
+            <main className={`pl-5 pr-5 ${appStyles.main}`}>
+              <BurgerIngredients openIngredientModal={openIngredientModal} />
+              <BurgerConstructor
+                createOrder={createOrder}
+                onDropHandler={handleDrop}
+                onDeleteHandler={handleDelete}
+              />
+            </main>
           )}
-          <BurgerConstructor createOrder={createOrder} />
-        </main>
-
+        </DndProvider>
         {modal && ingredientDetails && (
           <Modal
             handleClose={closeIngredientModal}
