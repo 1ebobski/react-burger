@@ -18,8 +18,13 @@ const burgerSlice = createSlice({
     ingredientsRequest: false,
     ingredientsSuccess: false,
     ingredientsFailed: false,
+    tab: "bun",
   },
   reducers: {
+    selectTab: (state, action) => {
+      const { tab } = action.payload;
+      state.tab = tab;
+    },
     addBun: (state, action) => {
       const { bun } = action.payload;
 
@@ -67,7 +72,15 @@ const burgerSlice = createSlice({
       );
     },
     moveIngredient: (state, action) => {
-      const { index } = action.payload;
+      const { dragIndex, hoverIndex } = action.payload;
+      const dragIngredent = state.fillingList[dragIndex];
+      // state.fillingList = [
+      //   ...state.fillingList.slice(0, hoverIndex),
+      //   dragIngredent,
+      //   ...state.fillingList.slice(dragIndex),
+      // ];
+      state.fillingList.splice(dragIndex, 1); // removing what you are dragging.
+      state.fillingList.splice(hoverIndex, 0, dragIngredent);
     },
     cleanBurgerConstructor: (state) => {
       state.bun = null;
@@ -96,9 +109,11 @@ const burgerSlice = createSlice({
 
 const { actions, reducer } = burgerSlice;
 export const {
+  selectTab,
   changeBun,
   addIngredient,
   addBun,
+  moveIngredient,
   deleteIngredient,
   cleanBurgerConstructor,
 } = actions;

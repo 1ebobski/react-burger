@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -8,13 +8,14 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import { useDispatch, useSelector } from "react-redux";
-import createRandomBurger from "../../utils/create-random-burger";
+
 import {
   addIngredientDetails,
   cleanIngredientDetails,
 } from "../../services/ingredient";
 
 import {
+  selectTab,
   addIngredient,
   addBun,
   cleanBurgerConstructor,
@@ -40,23 +41,43 @@ function App() {
 
   const { orderSuccess } = useSelector((store) => store.order);
 
-  const { burgerBun, burgerFilling } = useSelector((store) => store.burger);
-
-  // const [data, setData] = useState(null);
-
-  // const dataStateValue = useMemo(
-  //   () => ({
-  //     data,
-  //     setData,
-  //   }),
-  //   [data, setData]
-  // );
+  const { burgerBun, burgerFilling, tab } = useSelector(
+    (store) => store.burger
+  );
 
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchBurgerIngredients());
   }, []);
+
+  const handleScroll = useCallback(
+    (event, scrollRef, bunRef, sauceRef, mainRef) => {
+      event.preventDefault();
+
+      if (
+        scrollRef.current.scrollTop <
+        bunRef.current.getBoundingClientRect().height
+      ) {
+        dispatch(selectTab({ tab: "bun" }));
+      } else if (
+        scrollRef.current.scrollTop > sauceRef.current.offsetTop - 40 &&
+        scrollRef.current.scrollTop < mainRef.current.offsetTop - 40
+      ) {
+        dispatch(selectTab({ tab: "sauce" }));
+      } else if (scrollRef.current.scrollTop > mainRef.current.offsetTop - 40) {
+        dispatch(selectTab({ tab: "main" }));
+      }
+    }
+  );
+
+  const handleTabClick = (tab, ref, scrollRef) => {
+    dispatch(selectTab({ tab }));
+    scrollRef.current.scrollTo({
+      top: ref.current.offsetTop - 40,
+      behavior: "smooth",
+    });
+  };
 
   const handleDrop = (droppedIngredient) => {
     const ingredient = ingredients.find(
@@ -118,7 +139,11 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           {ingredientsSuccess && (
             <main className={`pl-5 pr-5 ${appStyles.main}`}>
-              <BurgerIngredients openIngredientModal={openIngredientModal} />
+              <BurgerIngredients
+                openIngredientModal={openIngredientModal}
+                onTabClick={handleTabClick}
+                onScroll={handleScroll}
+              />
               <BurgerConstructor
                 createOrder={createOrder}
                 onDropHandler={handleDrop}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -7,14 +7,17 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
+import DraggableContainer from "../draggable-container/draggable-container";
+import { moveIngredient } from "../../services/burger";
 
 export default function BurgerConstructor({
   createOrder,
   onDropHandler,
   onDeleteHandler,
 }) {
+  const dispatch = useDispatch();
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
     drop(ingredient) {
@@ -37,6 +40,9 @@ export default function BurgerConstructor({
     return fillingPrice + bunPrice;
   }, [bun, fillingList]);
 
+  const moveComponent = useCallback((dragIndex, hoverIndex) => {
+    dispatch(moveIngredient({ dragIndex, hoverIndex }));
+  }, []);
   return (
     <section
       className={`ml-5 pt-20 ${burgerConstructorStyles.section}`}
@@ -56,9 +62,11 @@ export default function BurgerConstructor({
       <ul className={`p-4 ${burgerConstructorStyles.scroll}`}>
         {fillingList.length > 0
           ? fillingList.map((ingredient, index) => (
-              <li
-                className={`mb-4 ${burgerConstructorStyles.ingredient}`}
-                key={index}>
+              <DraggableContainer
+                id={ingredient._id}
+                index={index}
+                key={index}
+                moveComponent={moveComponent}>
                 <DragIcon className='mr-2' />
                 <ConstructorElement
                   text={ingredient.name}
@@ -68,7 +76,7 @@ export default function BurgerConstructor({
                     onDeleteHandler(event, ingredient._id, index)
                   }
                 />
-              </li>
+              </DraggableContainer>
             ))
           : null}
       </ul>

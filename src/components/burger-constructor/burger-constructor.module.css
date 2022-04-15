@@ -37,8 +37,8 @@
   composes: subHeader;
 }
 
-.ingredient {
+/* .ingredient {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+} */
