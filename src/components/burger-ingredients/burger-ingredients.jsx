@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 
 export default function BurgerIngredients({
@@ -10,7 +10,20 @@ export default function BurgerIngredients({
   onTabClick,
   onScroll,
 }) {
-  const dispatch = useDispatch();
+  const scrollRef = useRef();
+  const bunRef = useRef();
+  const sauceRef = useRef();
+  const mainRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current.addEventListener("scroll", (e) =>
+      onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
+    );
+    return () => {
+      scrollRef.current.removeEventListener("scroll", onScroll);
+    };
+  }, [scrollRef, bunRef, sauceRef, mainRef, onScroll]);
+
   const { ingredients, tab } = useSelector((store) => store.burger);
 
   const bunData = ingredients.filter((ingredient) => ingredient.type === "bun");
@@ -21,20 +34,6 @@ export default function BurgerIngredients({
     (ingredient) => ingredient.type === "sauce"
   );
 
-  useEffect(() => {
-    scrollRef.current.addEventListener("scroll", (e) =>
-      onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
-    );
-    return () => {
-      scrollRef.current.removeEventListener("scroll", onScroll);
-    };
-  });
-
-  const scrollRef = useRef();
-  const bunRef = useRef();
-  const sauceRef = useRef();
-  const mainRef = useRef();
-
   return (
     <section className={`mr-5 ${burgerIngredientsStyles.section}`}>
       <header>
@@ -44,19 +43,19 @@ export default function BurgerIngredients({
         <nav className={burgerIngredientsStyles.tabs}>
           <Tab
             value='bun'
-            onClick={(tab) => onTabClick(tab, bunRef, scrollRef)}
+            onClick={() => onTabClick(bunRef, scrollRef)}
             active={tab === "bun"}>
             Булки
           </Tab>
           <Tab
             value='sauce'
-            onClick={(tab) => onTabClick(tab, sauceRef, scrollRef)}
+            onClick={() => onTabClick(sauceRef, scrollRef)}
             active={tab === "sauce"}>
             Соусы
           </Tab>
           <Tab
             value='main'
-            onClick={(tab) => onTabClick(tab, mainRef, scrollRef)}
+            onClick={() => onTabClick(mainRef, scrollRef)}
             active={tab === "main"}>
             Начинки
           </Tab>

@@ -11,7 +11,7 @@ export default function Modal({ handleClose, title, children }) {
   const escFunction = useCallback(
     (event) => {
       if (event.key === "Escape") {
-        handleClose();
+        handleClose(event);
       }
     },
     [handleClose]

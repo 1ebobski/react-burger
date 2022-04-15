@@ -21,6 +21,7 @@ import {
   cleanBurgerConstructor,
   fetchBurgerIngredients,
   deleteIngredient,
+  cleanIngredients,
 } from "../../services/burger";
 import {
   fetchOrderId,
@@ -41,9 +42,7 @@ function App() {
 
   const { orderSuccess } = useSelector((store) => store.order);
 
-  const { burgerBun, burgerFilling, tab } = useSelector(
-    (store) => store.burger
-  );
+  const { bun, fillingList } = useSelector((store) => store.burger);
 
   const [modal, setModal] = useState(false);
 
@@ -61,18 +60,20 @@ function App() {
       ) {
         dispatch(selectTab({ tab: "bun" }));
       } else if (
-        scrollRef.current.scrollTop > sauceRef.current.offsetTop - 40 &&
+        scrollRef.current.scrollTop >= sauceRef.current.offsetTop - 40 &&
         scrollRef.current.scrollTop < mainRef.current.offsetTop - 40
       ) {
         dispatch(selectTab({ tab: "sauce" }));
-      } else if (scrollRef.current.scrollTop > mainRef.current.offsetTop - 40) {
+      } else if (
+        scrollRef.current.scrollTop >=
+        mainRef.current.offsetTop - 40
+      ) {
         dispatch(selectTab({ tab: "main" }));
       }
     }
   );
 
-  const handleTabClick = (tab, ref, scrollRef) => {
-    dispatch(selectTab({ tab }));
+  const handleTabClick = (ref, scrollRef) => {
     scrollRef.current.scrollTo({
       top: ref.current.offsetTop - 40,
       behavior: "smooth",
@@ -101,8 +102,8 @@ function App() {
 
   const createOrder = (event) => {
     event.preventDefault();
-    const orderList = burgerFilling
-      .concat(burgerBun)
+    const orderList = fillingList
+      .concat(bun)
       .map((ingredient) => ingredient._id);
     dispatch(addOrderList(orderList));
     dispatch(fetchOrderId(orderList));
@@ -114,6 +115,7 @@ function App() {
     setModal(false);
     dispatch(cleanOrderData());
     dispatch(cleanBurgerConstructor());
+    dispatch(cleanIngredients());
   };
 
   const openIngredientModal = (event, id) => {

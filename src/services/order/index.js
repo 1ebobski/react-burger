@@ -43,6 +43,8 @@ const orderSlice = createSlice({
       .addCase(fetchOrderId.rejected, (state) => {
         state.orderRequest = false;
         state.orderFailed = true;
+        state.orderList = [];
+        state.orderId = "";
       });
   },
 });
