@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { burgerApi } from "../..";
+import { v4 as uuidv4 } from "uuid";
 
 export const fetchBurgerIngredients = createAsyncThunk(
   "ingredients/fetchStatus",
@@ -52,9 +53,12 @@ const burgerSlice = createSlice({
       }
     },
     addIngredient: (state, action) => {
-      const { filling, uuid } = action.payload;
+      const { filling } = action.payload;
 
-      state.fillingList = state.fillingList.concat({ ...filling, uuid });
+      state.fillingList = state.fillingList.concat({
+        ...filling,
+        uuid: uuidv4(),
+      });
       state.ingredients = state.ingredients.map((ingredient) =>
         ingredient._id === filling._id
           ? { ...ingredient, counter: ++ingredient.counter }

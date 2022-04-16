@@ -8,7 +8,7 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+
 
 import {
   addIngredientDetails,
@@ -91,7 +91,7 @@ function App() {
         break;
       case "main":
       case "sauce":
-        dispatch(addIngredient({ filling: ingredient, uuid: uuidv4() }));
+        dispatch(addIngredient({ filling: ingredient }));
         break;
     }
   };
