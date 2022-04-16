@@ -2,13 +2,9 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
 import App from "./components/app/app";
-import ingredientReducer from "./services/ingredient";
-// import burgerConstructorReducer from "./services/burger-constructor";
-import burgerReducer from "./services/burger";
-import orderReducer from "./services/order";
 import BurgerApi from "./utils/burger-api";
+import store from "./services/store";
 import {
   BURGER_API_URL,
   INGREDIENTS_ENDPOINT,
@@ -29,22 +25,6 @@ const burgerApi = new BurgerApi({
   url: BURGER_API_URL,
   ingredientsEndpoint: INGREDIENTS_ENDPOINT,
   orderEndpoint: ORDERS_ENDPOINT,
-});
-
-const store = configureStore({
-  reducer: {
-    ingredient: ingredientReducer,
-    // burgerConstructor: burgerConstructorReducer,
-    burger: burgerReducer,
-    order: orderReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      // serializableCheck: false
-    }),
-  // .concat(logger)
-  devTools: process.env.NODE_ENV !== "production",
-  enhancers: [],
 });
 
 ReactDOM.render(
