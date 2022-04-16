@@ -52,9 +52,9 @@ const burgerSlice = createSlice({
       }
     },
     addIngredient: (state, action) => {
-      const { filling } = action.payload;
+      const { filling, uuid } = action.payload;
 
-      state.fillingList = state.fillingList.concat(filling);
+      state.fillingList = state.fillingList.concat({ ...filling, uuid });
       state.ingredients = state.ingredients.map((ingredient) =>
         ingredient._id === filling._id
           ? { ...ingredient, counter: ++ingredient.counter }

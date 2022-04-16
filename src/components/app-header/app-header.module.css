@@ -10,7 +10,7 @@
   /* max-width: 1280px; */
   width: 100%;
   /* margin: 0 auto; */
-
+  position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -29,7 +29,14 @@
 
 .logo {
   position: absolute;
-  left: calc(50% - 145px);
+  /* left: calc(50% - 145px); */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
 }
 
 .tab:last-child {

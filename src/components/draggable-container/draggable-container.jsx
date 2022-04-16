@@ -67,6 +67,6 @@ export default function DraggableContainer({
 DraggableContainer.propTypes = {
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
   moveComponent: PropTypes.func.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };

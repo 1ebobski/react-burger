@@ -26,18 +26,20 @@ export default function Modal({ handleClose, title, children }) {
   }, [escFunction]);
 
   return ReactDOM.createPortal(
-    <div className={`p-10 ${modalStyles.modal}`}>
-      <header className={modalStyles.header}>
-        {title ? (
-          <h1 className={`text text_type_main-large  ${modalStyles.title}`}>
-            {title}
-          </h1>
-        ) : null}
-        <CloseIcon type='primary' onClick={handleClose} />
-      </header>
-      {children}
+    <>
+      <div className={`p-10 ${modalStyles.modal}`}>
+        <header className={modalStyles.header}>
+          {title ? (
+            <h1 className={`text text_type_main-large  ${modalStyles.title}`}>
+              {title}
+            </h1>
+          ) : null}
+          <CloseIcon type='primary' onClick={handleClose} />
+        </header>
+        {children}
+      </div>
       <ModalOverlay handleClose={handleClose} />
-    </div>,
+    </>,
     modalRoot
   );
 }

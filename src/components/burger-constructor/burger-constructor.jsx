@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -28,7 +28,7 @@ export default function BurgerConstructor({
     }),
   });
 
-  const borderColor = isHover ? "lightgreen" : "transparent";
+  // const borderColor = isHover ? "lightgreen" : "transparent";
   const { bun, fillingList } = useSelector((store) => store.burger);
 
   const calculateOrderPrice = useMemo(() => {
@@ -40,9 +40,13 @@ export default function BurgerConstructor({
     return fillingPrice + bunPrice;
   }, [bun, fillingList]);
 
-  const moveComponent = useCallback((dragIndex, hoverIndex) => {
-    dispatch(moveIngredient({ dragIndex, hoverIndex }));
-  }, []);
+  const moveComponent = useCallback(
+    (dragIndex, hoverIndex) => {
+      dispatch(moveIngredient({ dragIndex, hoverIndex }));
+    },
+    [dispatch]
+  );
+
   return (
     <section
       className={`ml-5 pt-20 ${burgerConstructorStyles.section}`}
@@ -65,13 +69,13 @@ export default function BurgerConstructor({
               <DraggableContainer
                 id={ingredient._id}
                 index={index}
-                key={index}
+                key={ingredient.uuid}
                 moveComponent={moveComponent}>
                 <DragIcon className='mr-2' />
                 <ConstructorElement
                   text={ingredient.name}
                   price={ingredient.price}
-                  thumbnail={ingredient.image_mobile}
+                  thumbnail={ingredient.image_mobile} 
                   handleClose={(event) =>
                     onDeleteHandler(event, ingredient._id, index)
                   }
@@ -99,9 +103,11 @@ export default function BurgerConstructor({
           </span>
           <CurrencyIcon type='primary' />
         </div>
-        <Button type='primary' onClick={createOrder}>
+        {/* {bun ? ( */}
+        <Button type='primary' onClick={createOrder} disabled={!bun}>
           Оформить заказ
         </Button>
+        {/* ) : null} */}
       </footer>
     </section>
   );
@@ -109,4 +115,6 @@ export default function BurgerConstructor({
 
 BurgerConstructor.propTypes = {
   createOrder: PropTypes.func.isRequired,
+  onDropHandler: PropTypes.func.isRequired,
+  onDeleteHandler: PropTypes.func.isRequired,
 };
