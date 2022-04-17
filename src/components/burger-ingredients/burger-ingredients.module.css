@@ -21,6 +21,9 @@
 
 .scroll {
   overflow-y: scroll;
+  position: relative;
+  /* display: flex;
+  align-items: center; */
 
   height: calc(35%);
 
