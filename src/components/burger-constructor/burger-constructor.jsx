@@ -1,22 +1,19 @@
-import { useMemo, useCallback, useEffect } from "react";
+import burgerConstructorStyles from "./burger-constructor.module.css";
+import { useMemo, useCallback, memo } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
 import {
   Button,
   CurrencyIcon,
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import burgerConstructorStyles from "./burger-constructor.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { useDrop } from "react-dnd";
-import DraggableContainer from "../draggable-container/draggable-container";
+
+import { DraggableContainer } from "../";
 import { moveIngredient } from "../../services/burger";
 
-export default function BurgerConstructor({
-  createOrder,
-  onDropHandler,
-  onDeleteHandler,
-}) {
+function BurgerConstructor({ createOrder, onDropHandler, onDeleteHandler }) {
   const dispatch = useDispatch();
   const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
@@ -44,7 +41,7 @@ export default function BurgerConstructor({
     (dragIndex, hoverIndex) => {
       dispatch(moveIngredient({ dragIndex, hoverIndex }));
     },
-    [dispatch]
+    [dispatch, moveIngredient]
   );
 
   return (
@@ -75,7 +72,7 @@ export default function BurgerConstructor({
                 <ConstructorElement
                   text={ingredient.name}
                   price={ingredient.price}
-                  thumbnail={ingredient.image_mobile} 
+                  thumbnail={ingredient.image_mobile}
                   handleClose={(event) =>
                     onDeleteHandler(event, ingredient._id, index)
                   }
@@ -118,3 +115,5 @@ BurgerConstructor.propTypes = {
   onDropHandler: PropTypes.func.isRequired,
   onDeleteHandler: PropTypes.func.isRequired,
 };
+
+export default memo(BurgerConstructor);

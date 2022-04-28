@@ -14,17 +14,27 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  color: #f2f2f3;
 
   /* border: 1px dashed #4c4cff; */
 }
 
-.tab {
+.link {
   display: flex;
   align-items: center;
-
   border-radius: 40px;
+  text-decoration: none;
+  color: #f2f2f3;
 
   /* border: 1px dashed #4c4cff; */
+}
+
+.link:visited {
+  color: inherit;
+}
+
+.link:last-child {
+  margin-left: auto;
 }
 
 .logo {

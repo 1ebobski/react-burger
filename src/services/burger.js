@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { burgerApi } from "../..";
+    import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { api } from "..";
 import { v4 as uuidv4 } from "uuid";
 
 export const fetchBurgerIngredients = createAsyncThunk(
   "ingredients/fetchStatus",
   async () => {
-    const response = await burgerApi.getIngredients();
+    const response = await api.fetchIngredients();
     return response.data;
   }
 );

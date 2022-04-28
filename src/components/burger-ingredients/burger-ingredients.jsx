@@ -1,28 +1,26 @@
-import PropTypes from "prop-types";
-import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
-import Ingredient from "../ingredient/ingredient";
+import { useEffect, useRef, memo } from "react";
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Ingredient } from "../";
 
-export default function BurgerIngredients({
-  openIngredientModal,
-  onTabClick,
-  onScroll,
-}) {
+function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
   const scrollRef = useRef();
   const bunRef = useRef();
   const sauceRef = useRef();
   const mainRef = useRef();
 
   useEffect(() => {
+    // console.log(scrollRef);
     scrollRef.current.addEventListener("scroll", (e) =>
       onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
     );
     return () => {
-      scrollRef.current.removeEventListener("scroll", onScroll);
+      // console.log(scrollRef);
+      // scrollRef.current.removeEventListener("scroll", onScroll);
     };
-  }, [scrollRef, bunRef, sauceRef, mainRef, onScroll]);
+  }, [scrollRef, bunRef, sauceRef, mainRef]);
 
   const { ingredients, tab } = useSelector((store) => store.burger);
 
@@ -111,3 +109,5 @@ BurgerIngredients.propTypes = {
   onTabClick: PropTypes.func.isRequired,
   onScroll: PropTypes.func.isRequired,
 };
+
+export default memo(BurgerIngredients);

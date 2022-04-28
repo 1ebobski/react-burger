@@ -1,5 +1,8 @@
 import PropTypes from "prop-types";
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  CurrencyIcon,
+  Counter,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import ingredientStyles from "./ingredient.module.css";
 import { useDrag } from "react-dnd";
 
@@ -24,6 +27,7 @@ export default function Ingredient({
           <span className={"text text_type_digits-default"}>{counter}</span>
         </div>
       ) : null}
+      {/* {counter > 0 ? <Counter count={counter} size='default' /> : null} */}
       <img className='mr-4 mb-1 ml-4' src={image}></img>
       <div
         className={`mb-1 text text_type_digits-default ${ingredientStyles.price}`}>

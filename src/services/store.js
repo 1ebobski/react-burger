@@ -1,14 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import ingredientReducer from "./ingredient";
-import burgerReducer from "./burger";
-import orderReducer from "./order";
+import {
+  authReducer,
+  burgerReducer,
+  ingredientReducer,
+  orderReducer,
+} from "./";
 
 const store = configureStore({
   reducer: {
-    ingredient: ingredientReducer,
-    // burgerConstructor: burgerConstructorReducer,
+    auth: authReducer,
     burger: burgerReducer,
+    ingredient: ingredientReducer,
     order: orderReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -21,4 +24,3 @@ const store = configureStore({
 });
 
 export default store;
-  

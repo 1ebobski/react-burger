@@ -3,28 +3,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./components/app/app";
-import BurgerApi from "./utils/burger-api";
+import { Api } from "./utils";
 import store from "./services/store";
-import {
-  BURGER_API_URL,
-  INGREDIENTS_ENDPOINT,
-  ORDERS_ENDPOINT,
-} from "./constants";
+import { API, INGREDIENTS, ORDERS, AUTH, PASSWORD_RESET } from "./constants";
 // import reportWebVitals from './reportWebVitals';
 
-// import { compose, createStore, applyMiddleware } from "redux";
-
-// const composeEnhancers =
-//   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-//     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-//     : compose;
-// const enhancer = composeEnhancers(applyMiddleware(thunk));
-// const store = createStore(rootReducer, enhancer);
-
-const burgerApi = new BurgerApi({
-  url: BURGER_API_URL,
-  ingredientsEndpoint: INGREDIENTS_ENDPOINT,
-  orderEndpoint: ORDERS_ENDPOINT,
+const api = new Api({
+  API,
+  INGREDIENTS,
+  ORDERS,
+  AUTH,
+  PASSWORD_RESET,
 });
 
 ReactDOM.render(
@@ -36,7 +25,7 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-export { burgerApi };
+export { api };
 
 // reportWebVitals(console.log);
 

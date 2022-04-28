@@ -1,8 +1,8 @@
 import orderDetailsStyles from "./order-details.module.css";
-import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import { useMemo } from "react";
-import { Loader } from "../loader/loader";
+import { useSelector } from "react-redux";
+import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Loader } from "../";
 
 export default function OrderDetails() {
   const { orderRequest, orderId } = useSelector((store) => store.order);

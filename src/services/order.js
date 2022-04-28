@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { burgerApi } from "../..";
+import { api } from "..";
 
 export const fetchOrderId = createAsyncThunk(
   "order/fetchStatus",
   async (orderList) => {
-    const response = await burgerApi.getOrderId(orderList);
+    const response = await api.getOrderId(orderList);
 
     return response;
   }
