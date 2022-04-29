@@ -28,14 +28,14 @@ export default function Modal({ handleClose, title, children }) {
   return ReactDOM.createPortal(
     <>
       <div className={`p-10 ${modalStyles.modal}`}>
-        <header className={modalStyles.header}>
+        <div className={modalStyles.header}>
           {title ? (
             <h1 className={`text text_type_main-large  ${modalStyles.title}`}>
               {title}
-            </h1>
+            </h1> 
           ) : null}
           <CloseIcon type='primary' onClick={handleClose} />
-        </header>
+        </div>
         {children}
       </div>
       <ModalOverlay handleClose={handleClose} />

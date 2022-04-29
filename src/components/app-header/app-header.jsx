@@ -48,9 +48,9 @@ export default function AppHeader() {
             Лента заказов
           </span>
         </Link>
-        <div className={appHeaderStyles.logo}>
+        <Link to={{ pathname: "/" }} className={appHeaderStyles.logo}>
           <Logo />
-        </div>
+        </Link>
         <Link
           to={{
             pathname: "/profile",

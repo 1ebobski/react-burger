@@ -1,4 +1,4 @@
-import homePageStyles from "./home.module.css";
+import homePageStyles from "./styles/home.module.css";
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DndProvider } from "react-dnd";
@@ -10,46 +10,44 @@ import {
   Modal,
   IngredientDetails,
   OrderDetails,
-} from "../../components";
+} from "../components";
 
 import {
   addIngredientDetails,
   cleanIngredientDetails,
-} from "../../services/ingredient";
+} from "../services/ingredient/actions";
 
 import {
   selectTab,
   addIngredient,
   addBun,
   cleanBurgerConstructor,
-  fetchBurgerIngredients,
   deleteIngredient,
   cleanIngredients,
-} from "../../services/burger";
+} from "../services/burger/actions";
 
-import {
-  fetchOrderId,
-  addOrderList,
-  cleanOrderData,
-} from "../../services/order";
+import { cleanOrderData } from "../services/order/actions";
+import { createOrderThunk } from "../services/order/thunks";
+import fetchIngredientsThunk from "../services/burger/thunks";
 
 export default function HomePage() {
   const dispatch = useDispatch();
 
-  const { ingredients, ingredientsSuccess } = useSelector(
-    (store) => store.burger
-  );
+  const { ingredients } = useSelector((store) => store.burger);
+  const ingredientsSuccess = useSelector((store) => store.burger.success);
 
   const ingredientDetails = useSelector((store) => store.ingredient.details);
 
-  const { orderSuccess } = useSelector((store) => store.order);
+  const orderSuccess = useSelector((store) => store.order.success);
 
   const { bun, fillingList } = useSelector((store) => store.burger);
 
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchBurgerIngredients());
+    if (!ingredients) {
+      dispatch(fetchIngredientsThunk());
+    }
   }, [dispatch]);
 
   const handleScroll = useCallback(
@@ -111,11 +109,10 @@ export default function HomePage() {
 
   const createOrder = (event) => {
     event.preventDefault();
-    const orderList = fillingList
+    const ingredientsIds = fillingList
       .concat(bun)
       .map((ingredient) => ingredient._id);
-    dispatch(addOrderList(orderList));
-    dispatch(fetchOrderId(orderList));
+    dispatch(createOrderThunk({ ingredients: ingredientsIds }));
     setModal(true);
   };
 

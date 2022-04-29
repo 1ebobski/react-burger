@@ -1,14 +1,6 @@
-    import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api } from "..";
+import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
-export const fetchBurgerIngredients = createAsyncThunk(
-  "ingredients/fetchStatus",
-  async () => {
-    const response = await api.fetchIngredients();
-    return response.data;
-  }
-);
+import fetchIngredientsThunk from "./thunks";
 
 const burgerSlice = createSlice({
   name: "burger",
@@ -16,9 +8,9 @@ const burgerSlice = createSlice({
     ingredients: null,
     bun: null,
     fillingList: [],
-    ingredientsRequest: false,
-    ingredientsSuccess: false,
-    ingredientsFailed: false,
+    request: false,
+    success: false,
+    failed: false,
     tab: "bun",
   },
   reducers: {
@@ -94,20 +86,20 @@ const burgerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBurgerIngredients.pending, (state) => {
-        state.ingredientsRequest = true;
+      .addCase(fetchIngredientsThunk.pending, (state) => {
+        state.request = true;
       })
-      .addCase(fetchBurgerIngredients.fulfilled, (state, action) => {
-        state.ingredientsRequest = false;
-        state.ingredientsSuccess = true;
+      .addCase(fetchIngredientsThunk.fulfilled, (state, action) => {
+        state.request = false;
+        state.success = true;
         state.ingredients = action.payload.map((ingredient) => ({
           ...ingredient,
           counter: 0,
         }));
       })
-      .addCase(fetchBurgerIngredients.rejected, (state) => {
-        state.ingredientsRequest = false;
-        state.ingredientsFailed = true;
+      .addCase(fetchIngredientsThunk.rejected, (state) => {
+        state.request = false;
+        state.failed = true;
       });
   },
 });

@@ -5,16 +5,16 @@ import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-component
 import { Loader } from "../";
 
 export default function OrderDetails() {
-  const { orderRequest, orderId } = useSelector((store) => store.order);
+  const { request, id } = useSelector((store) => store.order);
 
-  const content = useMemo(() => {
-    return orderRequest ? (
+  const content = useMemo(() => {   
+    return request ? (
       <Loader size='large' />
     ) : (
       <>
         <span
           className={`mt-30 text text_type_digits-large ${orderDetailsStyles.number}`}>
-          {orderId}
+          {id}
         </span>
         <span className={`mt-8 text text_type_main-medium`}>
           идентификатор заказа
@@ -32,6 +32,6 @@ export default function OrderDetails() {
         </span>
       </>
     );
-  }, [orderId]);
+  }, [id]);
   return content;
 }

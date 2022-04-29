@@ -1,28 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api } from "..";
-
-const forgotPasswordThunk = createAsyncThunk(
-  "password/forgot",
-  async ({ email }) => {
-    const response = await api.resetPassword({
-      email,
-    });
-    return response;
-  }
-);
-
-const resetPasswordThunk = createAsyncThunk(
-  "password/reset",
-  async ({ email, password, code }) => {
-    const response = await api.resetPassword({
-      email,
-      password,
-      token: code,
-      type: "reset",
-    });
-    return response;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { forgotPasswordThunk, resetPasswordThunk } from "./thunks";
 
 const passwordSlice = createSlice({
   name: "password",
@@ -45,7 +22,6 @@ const passwordSlice = createSlice({
         state.forgot.request = true;
       })
       .addCase(forgotPasswordThunk.fulfilled, (state, action) => {
-        console.log(action);
         state.forgot.request = false;
         state.forgot.success = true;
       })
@@ -70,5 +46,4 @@ const passwordSlice = createSlice({
 });
 
 const { reducer } = passwordSlice;
-export { forgotPasswordThunk, resetPasswordThunk };
 export default reducer;

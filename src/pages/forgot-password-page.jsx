@@ -1,4 +1,4 @@
-import formStyles from "./form.module.css";
+import formStyles from "./styles/form.module.css";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect, useHistory } from "react-router-dom";
@@ -6,9 +6,8 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk } from "../services/auth";
-import { forgotPasswordThunk } from "../services/password";
-import { getCookie } from "../utils";
+import { getUserThunk } from "../services/auth/thunks";
+import { forgotPasswordThunk } from "../services/password/thunks";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -17,9 +16,8 @@ export default function ForgotPasswordPage() {
   const history = useHistory();
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    if (accessToken && accessToken !== "") {
-      dispatch(getUserThunk({ accessToken }));
+    if (!user) {
+      dispatch(getUserThunk());
     }
   }, []);
 
@@ -34,7 +32,6 @@ export default function ForgotPasswordPage() {
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     dispatch(forgotPasswordThunk({ email }));
-    localStorage.setItem("passwordResetRequested", true);
     history.push({
       pathname: "/reset-password",
     });
@@ -51,9 +48,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <form className={`text ${formStyles.form}`}>
-      <h1 className='text_type_main-medium'>Восстановление пароля</h1>
-
+    <form className={formStyles.form} onSubmit={handleSubmit}>
+      <h1 className='text text_type_main-medium'>Восстановление пароля</h1>
       <Input
         value={email}
         name='email'
@@ -62,12 +58,9 @@ export default function ForgotPasswordPage() {
         size='default'
       />
 
-      <Button htmlType='submit' onClick={handleSubmit}>
-        Восстановить
-      </Button>
-      <footer
-        className={`text_type_main-default text_color_inactive ${formStyles.footer}`}>
-        <span>
+      <Button htmlType='submit'>Восстановить</Button>
+      <div className={formStyles.textContainer}>
+        <span className='text text_type_main-default text_color_inactive'>
           Вспомнили пароль?
           <Link
             to={{ pathname: "/login" }}
@@ -75,7 +68,7 @@ export default function ForgotPasswordPage() {
             Войти
           </Link>
         </span>
-      </footer>
+      </div>
     </form>
   );
 }

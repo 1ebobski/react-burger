@@ -1,4 +1,4 @@
-import profileStyles from "./profile.module.css";
+import profileStyles from "./styles/profile.module.css";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,8 +6,11 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
-import { getUserThunk, updateUserThunk, logoutThunk } from "../services/auth";
-import { getCookie, setCookie } from "../utils";
+import {
+  getUserThunk,
+  updateUserThunk,
+  logoutThunk,
+} from "../services/auth/thunks";
 
 export default function ProfilePage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -19,13 +22,16 @@ export default function ProfilePage() {
   const passwordRef = useRef();
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    dispatch(getUserThunk({ accessToken }));
-  }, [dispatch]);
+    if (!user) {
+      dispatch(getUserThunk());
+    }
+  }, []);
 
   useEffect(() => {
-    setForm({ ...form, ...user });
-  }, [form, user]);
+    setForm({ ...user });
+  }, [user]);
+
+  useEffect(() => console.log(user), [user]);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -34,22 +40,13 @@ export default function ProfilePage() {
 
   const handleExit = (e) => {
     e.preventDefault();
-    const refreshToken = localStorage.getItem("refreshToken");
-    dispatch(logoutThunk({ refreshToken }));
-    setCookie("accessToken", "");
-    localStorage.removeItem("refreshToken");
+    dispatch(logoutThunk());
   };
 
   const updateData = useCallback(
     (e) => {
       e.preventDefault();
-      const accessToken = getCookie("accessToken");
-      dispatch(
-        updateUserThunk({
-          accessToken,
-          ...form,
-        })
-      );
+      dispatch(updateUserThunk());
     },
     [form, dispatch]
   );
@@ -74,7 +71,7 @@ export default function ProfilePage() {
           <span className='text_color_inactive'>Выход</span>
         </Link>
       </nav>
-      <form className={profileStyles.form}>
+      <form className={profileStyles.form} onSubmit={updateData}>
         <Input
           value={form.name}
           name='name'
@@ -107,7 +104,7 @@ export default function ProfilePage() {
           icon={"EditIcon"}
           ref={passwordRef}
           disabled></Input>
-        <Button onClick={updateData}>Применить</Button>
+        <Button>Применить</Button>
       </form>
     </div>
   );

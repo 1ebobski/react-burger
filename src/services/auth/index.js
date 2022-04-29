@@ -1,66 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api } from "..";
+import { createSlice } from "@reduxjs/toolkit";
 
-const registerThunk = createAsyncThunk(
-  "auth/register",
-  async ({ email, password, name }) => {
-    const res = await api.authenticate({
-      email,
-      password,
-      name,
-      type: "register",
-    });
-    return res;
-  }
-);
-
-const loginThunk = createAsyncThunk(
-  "auth/login",
-  async ({ email, password }) => {
-    const res = await api.authenticate({ email, password, type: "login" });
-    return res;
-  }
-);
-
-const logoutThunk = createAsyncThunk(
-  "auth/logout",
-  async ({ refreshToken }) => {
-    const res = await api.authenticate({ refreshToken, type: "logout" });
-    return res;
-  }
-);
-
-const tokenThunk = createAsyncThunk("auth/token", async ({ refreshToken }) => {
-  const res = await api.authenticate({ refreshToken, type: "token" });
-  return res;
-});
-
-const getUserThunk = createAsyncThunk(
-  "auth/get-user",
-  async ({ accessToken, refreshToken }) => {
-    const res = await api.authenticate({
-      accessToken,
-      refreshToken,
-      type: "user",
-      userActionType: "get",
-    });
-    return res;
-  }
-);
-
-const updateUserThunk = createAsyncThunk(
-  "auth/update-user",
-  async ({ name, email, accessToken }) => {
-    const res = await api.authenticate({
-      name,
-      email,
-      accessToken,
-      type: "user",
-      userActionType: "update",
-    });
-    return res;
-  }
-);
+import {
+  registerThunk,
+  loginThunk,
+  logoutThunk,
+  tokenThunk,
+  getUserThunk,
+  updateUserThunk,
+} from "./thunks";
 
 const authSlice = createSlice({
   name: "auth",
@@ -128,7 +75,7 @@ const authSlice = createSlice({
       .addCase(logoutThunk.pending, (state) => {
         state.logout.request = true;
       })
-      .addCase(logoutThunk.fulfilled, (state, action) => {
+      .addCase(logoutThunk.fulfilled, (state) => {
         state.logout.request = false;
         state.logout.success = true;
         state.user = null;
@@ -140,7 +87,7 @@ const authSlice = createSlice({
       .addCase(tokenThunk.pending, (state) => {
         state.tokenRequest = true;
       })
-      .addCase(tokenThunk.fulfilled, (state, action) => {
+      .addCase(tokenThunk.fulfilled, (state) => {
         state.token.request = false;
         state.token.success = true;
       })
@@ -152,6 +99,7 @@ const authSlice = createSlice({
         state.getUser.request = true;
       })
       .addCase(getUserThunk.fulfilled, (state, action) => {
+        console.log(action);
         const { user } = action.payload;
         state.user = { ...user };
         state.getUser.request = false;
@@ -178,12 +126,4 @@ const authSlice = createSlice({
 });
 
 const { reducer } = authSlice;
-export {
-  registerThunk,
-  loginThunk,
-  logoutThunk,
-  tokenThunk,
-  getUserThunk,
-  updateUserThunk,
-};
 export default reducer;

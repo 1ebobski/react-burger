@@ -1,4 +1,4 @@
-import formStyles from "./form.module.css";
+import formStyles from "./styles/form.module.css";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
@@ -7,8 +7,7 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk, registerThunk } from "../services/auth";
-import { getCookie } from "../utils";
+import { getUserThunk, registerThunk } from "../services/auth/thunks";
 
 export default function RegistrationPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -16,11 +15,10 @@ export default function RegistrationPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    if (accessToken !== "") {
-      dispatch(getUserThunk({ accessToken }));
+    if (!user) {
+      dispatch(getUserThunk());
     }
-  }, [dispatch]);
+  }, []);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -46,8 +44,8 @@ export default function RegistrationPage() {
   }
 
   return (
-    <form className={`text ${formStyles.form}`}>
-      <h1 className='text_type_main-medium'>Регистрация</h1>
+    <form className={formStyles.form} onSubmit={handleSubmit}>
+      <h1 className='text text_type_main-medium'>Регистрация</h1>
       <Input
         value={form.name}
         name='name'
@@ -68,20 +66,15 @@ export default function RegistrationPage() {
         onChange={onChange}
         size='default'
       />
-      <Button htmlType='submit' onClick={handleSubmit}>
-        Зарегистрироваться
-      </Button>
-      <footer
-        className={`text_type_main-default text_color_inactive ${formStyles.footer}`}>
-        <span>
+      <Button htmlType='submit'>Зарегистрироваться</Button>
+      <div className={formStyles.textContainer}>
+        <span className='text_type_main-default text_color_inactive'>
           Уже зарегистрированы?
-          <Link
-            to={{ pathname: "/login" }}
-            className={`ml-1 ${formStyles.link}`}>
+          <Link to={{ pathname: "/login" }} className={formStyles.link}>
             Войти
           </Link>
         </span>
-      </footer>
+      </div>
     </form>
   );
 }

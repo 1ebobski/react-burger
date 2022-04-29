@@ -1,4 +1,4 @@
-import formStyles from "./form.module.css";
+import formStyles from "./styles/form.module.css";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
@@ -7,8 +7,7 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk, loginThunk } from "../services/auth";
-import { getCookie } from "../utils";
+import { getUserThunk, loginThunk } from "../services/auth/thunks";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,13 +16,8 @@ export default function LoginPage() {
   const history = useHistory();
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (accessToken !== null && accessToken !== "" && refreshToken !== null) {
-      dispatch(getUserThunk({ accessToken, refreshToken }));
-    }
-  }, [dispatch, history]);
+    dispatch(getUserThunk());
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -48,11 +42,12 @@ export default function LoginPage() {
   );
 
   return (
-    <form className={`text ${formStyles.form}`}>
-      <h1 className='text_type_main-medium'>Вход</h1>
+    <form className={formStyles.form} onSubmit={handleSubmit}>
+      <h1 className='text text_type_main-medium'>Вход</h1>
       <Input
         value={form.email}
         name='email'
+        type='email'
         onChange={onChange}
         placeholder='E-mail'
         size='default'
@@ -63,28 +58,23 @@ export default function LoginPage() {
         onChange={onChange}
         size='default'
       />
-      <Button htmlType='submit' onClick={handleSubmit}>
-        Войти
-      </Button>
-      <footer
-        className={`text_type_main-default text_color_inactive ${formStyles.footer}`}>
-        <span>
+      <Button htmlType='submit'>Войти</Button>
+      <div className={formStyles.textContainer}>
+        <span className='text text_type_main-default text_color_inactive'>
           Вы новый пользователь?
-          <Link
-            to={{ pathname: "/registration" }}
-            className={`ml-1 ${formStyles.link}`}>
+          <Link to={{ pathname: "/registration" }} className={formStyles.link}>
             Зарегистрироваться
           </Link>
         </span>
-        <span>
+        <span className='text text_type_main-default text_color_inactive'>
           Забыли пароль?
           <Link
             to={{ pathname: "/forgot-password" }}
-            className={`ml-1 ${formStyles.link}`}>
+            className={formStyles.link}>
             Восстановить пароль
           </Link>
         </span>
-      </footer>
+      </div>
     </form>
   );
 }
