@@ -1,28 +1,29 @@
-import PropTypes from "prop-types";
-import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
-import Ingredient from "../ingredient/ingredient";
+import { useEffect, useRef, memo } from "react";
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Ingredient } from "..";
 
-export default function BurgerIngredients({
-  openIngredientModal,
-  onTabClick,
-  onScroll,
-}) {
+function BurgerIngredients({ onTabClick, onScroll }) {
   const scrollRef = useRef();
   const bunRef = useRef();
   const sauceRef = useRef();
   const mainRef = useRef();
 
+  const location = useLocation();
+
   useEffect(() => {
+    // console.log(scrollRef);
     scrollRef.current.addEventListener("scroll", (e) =>
       onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
     );
     return () => {
-      scrollRef.current.removeEventListener("scroll", onScroll);
+      // console.log(scrollRef);
+      // scrollRef.current.removeEventListener("scroll", onScroll);
     };
-  }, [scrollRef, bunRef, sauceRef, mainRef, onScroll]);
+  }, [scrollRef, bunRef, sauceRef, mainRef]);
 
   const { ingredients, tab } = useSelector((store) => store.burger);
 
@@ -67,11 +68,15 @@ export default function BurgerIngredients({
 
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {bunData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -80,11 +85,15 @@ export default function BurgerIngredients({
           <h2 className={"mt-10 mb-6"}>Соусы</h2>
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {sauceData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} key={ingredient._id} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -93,11 +102,15 @@ export default function BurgerIngredients({
           <h2 className='mt-10 mb-6'>Начинки</h2>
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {mainData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} key={ingredient._id} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -107,7 +120,8 @@ export default function BurgerIngredients({
 }
 
 BurgerIngredients.propTypes = {
-  openIngredientModal: PropTypes.func.isRequired,
   onTabClick: PropTypes.func.isRequired,
   onScroll: PropTypes.func.isRequired,
 };
+
+export default memo(BurgerIngredients);

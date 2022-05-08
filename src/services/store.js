@@ -1,24 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import ingredientReducer from "./ingredient";
+import authReducer from "./auth";
 import burgerReducer from "./burger";
+import passwordReducer from "./password";
 import orderReducer from "./order";
 
 const store = configureStore({
   reducer: {
-    ingredient: ingredientReducer,
-    // burgerConstructor: burgerConstructorReducer,
+    auth: authReducer,
     burger: burgerReducer,
     order: orderReducer,
+    password: passwordReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      // serializableCheck: false
-    }),
-  // .concat(logger)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== "production",
   enhancers: [],
 });
 
 export default store;
-  

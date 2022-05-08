@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  margin: 180px auto 0;
+  gap: 24px;
+}
+
+.link {
+  color: #4c4cff;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 56px;
+}

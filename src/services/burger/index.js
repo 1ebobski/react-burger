@@ -1,27 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { burgerApi } from "../..";
+import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
-export const fetchBurgerIngredients = createAsyncThunk(
-  "ingredients/fetchStatus",
-  async () => {
-    const response = await burgerApi.getIngredients();
-    return response.data;
-  }
-);
+import fetchIngredientsThunk from "./thunks";
 
 const burgerSlice = createSlice({
   name: "burger",
   initialState: {
     ingredients: null,
+    selected: null,
     bun: null,
     fillingList: [],
-    ingredientsRequest: false,
-    ingredientsSuccess: false,
-    ingredientsFailed: false,
+    request: false,
+    success: false,
+    failed: false,
     tab: "bun",
   },
   reducers: {
+    addIngredientDetails: (state, action) => {
+      const { _id } = action.payload;
+      state.selected = state.ingredients.find(
+        (ingredient) => ingredient._id === _id
+      );
+    },
+    cleanIngredientDetails: (state) => {
+      state.selected = null;
+    },
     selectTab: (state, action) => {
       const { tab } = action.payload;
       state.tab = tab;
@@ -85,7 +87,7 @@ const burgerSlice = createSlice({
       state.bun = null;
       state.fillingList = [];
     },
-    cleanIngredients: (state) => {
+    removeCounts: (state) => {
       state.ingredients = state.ingredients.map((ingredient) => ({
         ...ingredient,
         counter: 0,
@@ -94,33 +96,36 @@ const burgerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBurgerIngredients.pending, (state) => {
-        state.ingredientsRequest = true;
+      .addCase(fetchIngredientsThunk.pending, (state) => {
+        state.request = true;
       })
-      .addCase(fetchBurgerIngredients.fulfilled, (state, action) => {
-        state.ingredientsRequest = false;
-        state.ingredientsSuccess = true;
+      .addCase(fetchIngredientsThunk.fulfilled, (state, action) => {
+        state.request = false;
+        state.success = true;
         state.ingredients = action.payload.map((ingredient) => ({
           ...ingredient,
           counter: 0,
         }));
       })
-      .addCase(fetchBurgerIngredients.rejected, (state) => {
-        state.ingredientsRequest = false;
-        state.ingredientsFailed = true;
+      .addCase(fetchIngredientsThunk.rejected, (state) => {
+        state.request = false;
+        state.failed = true;
       });
   },
 });
 
 const { actions, reducer } = burgerSlice;
 export const {
+  fetchIngredientsSync,
   selectTab,
   changeBun,
   addIngredient,
+  addIngredientDetails,
   addBun,
   moveIngredient,
   deleteIngredient,
-  cleanIngredients,
+  removeCounts,
   cleanBurgerConstructor,
+  cleanIngredientDetails,
 } = actions;
 export default reducer;

@@ -1,50 +1,40 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { burgerApi } from "../..";
-
-export const fetchOrderId = createAsyncThunk(
-  "order/fetchStatus",
-  async (orderList) => {
-    const response = await burgerApi.getOrderId(orderList);
-
-    return response;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { createOrderThunk } from "./thunks";
 
 const orderSlice = createSlice({
   name: "order",
   initialState: {
-    orderList: [],
-    orderId: "",
-    orderRequest: false,
-    orderSuccess: false,
-    orderFailed: false,
+    ingredients: [],
+    id: "",
+    request: false,
+    success: false,
+    failed: false,
   },
   reducers: {
-    addOrderList: (state, action) => {
-      state.orderList = action.payload;
-    },
     cleanOrderData: (state) => {
-      state.orderList = [];
-      state.orderId = "";
-      state.orderSuccess = false;
-      state.orderFailed = false;
+      state.ingredients = [];
+      state.id = "";
+      state.success = false;
+      state.failed = false;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrderId.pending, (state) => {
-        state.orderRequest = true;
+      .addCase(createOrderThunk.pending, (state, action) => {
+        const { ingredients } = action.meta.arg;
+        state.ingredients = ingredients;
+        state.request = true;
       })
-      .addCase(fetchOrderId.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderSuccess = true;
-        state.orderId = action.payload.order.number;
+      .addCase(createOrderThunk.fulfilled, (state, action) => {
+        state.request = false;
+        state.success = true;
+        state.id = action.payload.order.number;
       })
-      .addCase(fetchOrderId.rejected, (state) => {
-        state.orderRequest = false;
-        state.orderFailed = true;
-        state.orderList = [];
-        state.orderId = "";
+      .addCase(createOrderThunk.rejected, (state) => {
+        state.request = false;
+        state.failed = true;
+        state.ingredients = [];
+        state.id = "";
       });
   },
 });

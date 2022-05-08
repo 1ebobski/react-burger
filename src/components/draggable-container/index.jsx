@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
 import draggableContainerStyles from "./draggable-container.module.css";
-import { useDrag, useDrop } from "react-dnd";
 import { useRef } from "react";
+import PropTypes from "prop-types";
+import { useDrag, useDrop } from "react-dnd";
 
 export default function DraggableContainer({
   id,
@@ -51,7 +51,7 @@ export default function DraggableContainer({
       isDragging: monitor.isDragging(),
     }),
   });
-  const opacity = isDragging ? 0 : 1;
+  // const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
   return (
     <li

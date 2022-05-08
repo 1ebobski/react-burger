@@ -1,27 +1,31 @@
-import { useMemo, useCallback, useEffect } from "react";
+import burgerConstructorStyles from "./burger-constructor.module.css";
+import { useMemo, useCallback, memo } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
 import {
   Button,
   CurrencyIcon,
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import burgerConstructorStyles from "./burger-constructor.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { useDrop } from "react-dnd";
-import DraggableContainer from "../draggable-container/draggable-container";
+
+import { DraggableContainer } from "..";
 import { moveIngredient } from "../../services/burger";
 
-export default function BurgerConstructor({
-  createOrder,
-  onDropHandler,
-  onDeleteHandler,
+function BurgerConstructor({
+  onOrderCreate,
+  onIngredientDrop,
+  onIngredientDelete,
 }) {
   const dispatch = useDispatch();
-  const [{ isHover }, dropTarget] = useDrop({
+  const [
+    { isHover },
+    dropTarget,
+  ] = useDrop({
     accept: "ingredient",
-    drop(ingredient) {
-      onDropHandler(ingredient);
+    drop({ _id }) {
+      onIngredientDrop({ _id });
     },
     collect: (monitor) => ({
       isHover: monitor.isOver(),
@@ -44,7 +48,10 @@ export default function BurgerConstructor({
     (dragIndex, hoverIndex) => {
       dispatch(moveIngredient({ dragIndex, hoverIndex }));
     },
-    [dispatch]
+    [
+      dispatch,
+      // , moveIngredient
+    ]
   );
 
   return (
@@ -75,9 +82,9 @@ export default function BurgerConstructor({
                 <ConstructorElement
                   text={ingredient.name}
                   price={ingredient.price}
-                  thumbnail={ingredient.image_mobile} 
+                  thumbnail={ingredient.image_mobile}
                   handleClose={(event) =>
-                    onDeleteHandler(event, ingredient._id, index)
+                    onIngredientDelete(event, ingredient._id, index)
                   }
                 />
               </DraggableContainer>
@@ -103,18 +110,18 @@ export default function BurgerConstructor({
           </span>
           <CurrencyIcon type='primary' />
         </div>
-        {/* {bun ? ( */}
-        <Button type='primary' onClick={createOrder} disabled={!bun}>
+        <Button type='primary' onClick={onOrderCreate} disabled={!bun}>
           Оформить заказ
         </Button>
-        {/* ) : null} */}
       </footer>
     </section>
   );
 }
 
 BurgerConstructor.propTypes = {
-  createOrder: PropTypes.func.isRequired,
-  onDropHandler: PropTypes.func.isRequired,
-  onDeleteHandler: PropTypes.func.isRequired,
+  onOrderCreate: PropTypes.func.isRequired,
+  onIngredientDrop: PropTypes.func.isRequired,
+  onIngredientDelete: PropTypes.func.isRequired,
 };
+
+export default memo(BurgerConstructor);
