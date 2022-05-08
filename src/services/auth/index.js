@@ -12,7 +12,7 @@ import {
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    user: undefined,
     registration: {
       request: false,
       success: false,
@@ -85,7 +85,7 @@ const authSlice = createSlice({
         state.logout.failed = true;
       })
       .addCase(tokenThunk.pending, (state) => {
-        state.tokenRequest = true;
+        state.token.request = true;
       })
       .addCase(tokenThunk.fulfilled, (state) => {
         state.token.request = false;
@@ -99,13 +99,13 @@ const authSlice = createSlice({
         state.getUser.request = true;
       })
       .addCase(getUserThunk.fulfilled, (state, action) => {
-        console.log(action);
         const { user } = action.payload;
         state.user = { ...user };
         state.getUser.request = false;
         state.getUser.success = true;
       })
       .addCase(getUserThunk.rejected, (state) => {
+        state.user = null;
         state.getUser.request = false;
         state.getUser.failed = true;
       })

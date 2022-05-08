@@ -1,36 +1,26 @@
 import formStyles from "./styles/form.module.css";
 import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, Redirect } from "react-router-dom";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk } from "../services/auth/thunks";
 import { resetPasswordThunk } from "../services/password/thunks";
+import { Loader } from "../components";
 
 export default function ResetPasswordPage() {
   const [form, setForm] = useState({ password: "", code: "" });
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const history = useHistory();
+  const requested = localStorage.getItem("passwordResetRequested");
+  const { request, success } = useSelector((store) => store.password.reset);
 
   useEffect(() => {
-    if (!user) {
-      dispatch(getUserThunk());
+    if (!requested) {
+      history.replace({ pathname: "/forgot-password" });
     }
   }, []);
-
-  useEffect(() => {
-    const requested = localStorage.getItem("passwordResetRequested");
-    if (user) {
-      history.replace({ pathname: "/" });
-    } else {
-      if (!requested) {
-        history.replace({ pathname: "/login" });
-      }
-    }
-  }, [user, history]);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -41,15 +31,19 @@ export default function ResetPasswordPage() {
     (e) => {
       e.preventDefault();
       dispatch(resetPasswordThunk({ ...form }));
-      localStorage.removeItem("passwordResetRequested");
-      history.push({
-        pathname: "/login",
-      });
     },
-    [dispatch, history, form]
+    [dispatch, form]
   );
 
-  return (
+  return request ? (
+    <Loader size='large' />
+  ) : success ? (
+    <Redirect
+      to={{
+        pathname: "/login",
+      }}
+    />
+  ) : (
     <form className={formStyles.form} onSubmit={handleSubmit}>
       <h1 className='text text_type_main-medium'>Восстановление пароля</h1>
       <Input

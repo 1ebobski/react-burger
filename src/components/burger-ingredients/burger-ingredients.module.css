@@ -1,13 +1,17 @@
 .section {
   /* border: 1px dashed #4c4cff; */
   width: 50%;
-  
 }
 
 .tabs {
   display: flex;
 
   /* border: 1px dashed #4c4cff; */
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .container {

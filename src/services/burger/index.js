@@ -6,6 +6,7 @@ const burgerSlice = createSlice({
   name: "burger",
   initialState: {
     ingredients: null,
+    selected: null,
     bun: null,
     fillingList: [],
     request: false,
@@ -14,6 +15,15 @@ const burgerSlice = createSlice({
     tab: "bun",
   },
   reducers: {
+    addIngredientDetails: (state, action) => {
+      const { _id } = action.payload;
+      state.selected = state.ingredients.find(
+        (ingredient) => ingredient._id === _id
+      );
+    },
+    cleanIngredientDetails: (state) => {
+      state.selected = null;
+    },
     selectTab: (state, action) => {
       const { tab } = action.payload;
       state.tab = tab;
@@ -77,7 +87,7 @@ const burgerSlice = createSlice({
       state.bun = null;
       state.fillingList = [];
     },
-    cleanIngredients: (state) => {
+    removeCounts: (state) => {
       state.ingredients = state.ingredients.map((ingredient) => ({
         ...ingredient,
         counter: 0,
@@ -106,13 +116,16 @@ const burgerSlice = createSlice({
 
 const { actions, reducer } = burgerSlice;
 export const {
+  fetchIngredientsSync,
   selectTab,
   changeBun,
   addIngredient,
+  addIngredientDetails,
   addBun,
   moveIngredient,
   deleteIngredient,
-  cleanIngredients,
+  removeCounts,
   cleanBurgerConstructor,
+  cleanIngredientDetails,
 } = actions;
 export default reducer;

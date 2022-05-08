@@ -10,15 +10,22 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { DraggableContainer } from "../";
+import { DraggableContainer } from "..";
 import { moveIngredient } from "../../services/burger";
 
-function BurgerConstructor({ createOrder, onDropHandler, onDeleteHandler }) {
+function BurgerConstructor({
+  onOrderCreate,
+  onIngredientDrop,
+  onIngredientDelete,
+}) {
   const dispatch = useDispatch();
-  const [{ isHover }, dropTarget] = useDrop({
+  const [
+    { isHover },
+    dropTarget,
+  ] = useDrop({
     accept: "ingredient",
-    drop(ingredient) {
-      onDropHandler(ingredient);
+    drop({ _id }) {
+      onIngredientDrop({ _id });
     },
     collect: (monitor) => ({
       isHover: monitor.isOver(),
@@ -41,7 +48,10 @@ function BurgerConstructor({ createOrder, onDropHandler, onDeleteHandler }) {
     (dragIndex, hoverIndex) => {
       dispatch(moveIngredient({ dragIndex, hoverIndex }));
     },
-    [dispatch, moveIngredient]
+    [
+      dispatch,
+      // , moveIngredient
+    ]
   );
 
   return (
@@ -74,7 +84,7 @@ function BurgerConstructor({ createOrder, onDropHandler, onDeleteHandler }) {
                   price={ingredient.price}
                   thumbnail={ingredient.image_mobile}
                   handleClose={(event) =>
-                    onDeleteHandler(event, ingredient._id, index)
+                    onIngredientDelete(event, ingredient._id, index)
                   }
                 />
               </DraggableContainer>
@@ -100,20 +110,18 @@ function BurgerConstructor({ createOrder, onDropHandler, onDeleteHandler }) {
           </span>
           <CurrencyIcon type='primary' />
         </div>
-        {/* {bun ? ( */}
-        <Button type='primary' onClick={createOrder} disabled={!bun}>
+        <Button type='primary' onClick={onOrderCreate} disabled={!bun}>
           Оформить заказ
         </Button>
-        {/* ) : null} */}
       </footer>
     </section>
   );
 }
 
 BurgerConstructor.propTypes = {
-  createOrder: PropTypes.func.isRequired,
-  onDropHandler: PropTypes.func.isRequired,
-  onDeleteHandler: PropTypes.func.isRequired,
+  onOrderCreate: PropTypes.func.isRequired,
+  onIngredientDrop: PropTypes.func.isRequired,
+  onIngredientDelete: PropTypes.func.isRequired,
 };
 
 export default memo(BurgerConstructor);

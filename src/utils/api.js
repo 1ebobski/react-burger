@@ -3,9 +3,13 @@ export default class Api {
     this._options = options;
   }
 
+  async _checkResponse(res) {
+    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+  }
+
   async fetchIngredients() {
     const { API, INGREDIENTS } = this._options;
-    return fetch(`${API}/${INGREDIENTS}/`);
+    return fetch(`${API}/${INGREDIENTS}/`).then(this._checkResponse);
   }
 
   async createOrder({ ingredients }) {
@@ -17,7 +21,7 @@ export default class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ingredients }),
-    });
+    }).then(this._checkResponse);
   }
 
   async registerUser({ name, email, password }) {
@@ -29,12 +33,11 @@ export default class Api {
         "content-type": "application/json",
       },
       body: JSON.stringify({ name, email, password }),
-    });
+    }).then(this._checkResponse);
   }
 
   async loginUser({ email, password }) {
     const { API, AUTH } = this._options;
-    console.log(JSON.stringify({ email, password }));
     return fetch(`${API}/${AUTH}/login`, {
       method: "POST",
       headers: {
@@ -42,7 +45,7 @@ export default class Api {
         "content-type": "application/json",
       },
       body: JSON.stringify({ email, password }),
-    });
+    }).then(this._checkResponse);
   }
 
   async logoutUser({ token }) {
@@ -54,10 +57,10 @@ export default class Api {
         "content-type": "application/json",
       },
       body: JSON.stringify({ token }),
-    });
+    }).then(this._checkResponse);
   }
 
-  async refreshToken({ refreshToken }) {
+  async refreshToken({ token }) {
     const { API, AUTH } = this._options;
     return fetch(`${API}/${AUTH}/token`, {
       method: "POST",
@@ -65,8 +68,8 @@ export default class Api {
         accept: "application/json",
         "content-type": "application/json",
       },
-      body: JSON.stringify({ refreshToken }),
-    });
+      body: JSON.stringify({ token }),
+    }).then(this._checkResponse);
   }
 
   async getUser({ accessToken }) {
@@ -78,7 +81,7 @@ export default class Api {
         "content-type": "application/json",
         authorization: accessToken,
       },
-    });
+    }).then(this._checkResponse);
   }
 
   async updateUser({ name, email, accessToken }) {
@@ -91,7 +94,7 @@ export default class Api {
         authorization: accessToken,
       },
       body: JSON.stringify({ name, email }),
-    });
+    }).then(this._checkResponse);
   }
 
   async forgotPassword({ email }) {
@@ -103,7 +106,7 @@ export default class Api {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
-    });
+    }).then(this._checkResponse);
   }
 
   async resetPassword({ password, code }) {
@@ -114,7 +117,7 @@ export default class Api {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password, code }),
-    });
+      body: JSON.stringify({ password, token: code }),
+    }).then(this._checkResponse);
   }
 }

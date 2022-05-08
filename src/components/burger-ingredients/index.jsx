@@ -2,14 +2,17 @@ import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { useEffect, useRef, memo } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import { useLocation, Link } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Ingredient } from "../";
+import { Ingredient } from "..";
 
-function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
+function BurgerIngredients({ onTabClick, onScroll }) {
   const scrollRef = useRef();
   const bunRef = useRef();
   const sauceRef = useRef();
   const mainRef = useRef();
+
+  const location = useLocation();
 
   useEffect(() => {
     // console.log(scrollRef);
@@ -65,11 +68,15 @@ function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
 
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {bunData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -78,11 +85,15 @@ function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
           <h2 className={"mt-10 mb-6"}>Соусы</h2>
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {sauceData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} key={ingredient._id} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -91,11 +102,15 @@ function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
           <h2 className='mt-10 mb-6'>Начинки</h2>
           <ul className={`pr-4 pl-4 ${burgerIngredientsStyles.container}`}>
             {mainData.map((ingredient) => (
-              <Ingredient
-                {...ingredient}
-                handleClick={openIngredientModal}
+              <Link
+                className={burgerIngredientsStyles.link}
                 key={ingredient._id}
-              />
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}>
+                <Ingredient {...ingredient} key={ingredient._id} />
+              </Link>
             ))}
           </ul>
         </section>
@@ -105,7 +120,6 @@ function BurgerIngredients({ openIngredientModal, onTabClick, onScroll }) {
 }
 
 BurgerIngredients.propTypes = {
-  openIngredientModal: PropTypes.func.isRequired,
   onTabClick: PropTypes.func.isRequired,
   onScroll: PropTypes.func.isRequired,
 };

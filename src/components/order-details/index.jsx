@@ -2,12 +2,12 @@ import orderDetailsStyles from "./order-details.module.css";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Loader } from "../";
+import { Loader } from "..";
 
 export default function OrderDetails() {
   const { request, id } = useSelector((store) => store.order);
 
-  const content = useMemo(() => {   
+  const content = useMemo(() => {
     return request ? (
       <Loader size='large' />
     ) : (

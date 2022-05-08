@@ -2,15 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import authReducer from "./auth";
 import burgerReducer from "./burger";
-import ingredientReducer from "./ingredient";
+import passwordReducer from "./password";
 import orderReducer from "./order";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     burger: burgerReducer,
-    ingredient: ingredientReducer,
     order: orderReducer,
+    password: passwordReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== "production",

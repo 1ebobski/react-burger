@@ -21,7 +21,7 @@ const passwordSlice = createSlice({
       .addCase(forgotPasswordThunk.pending, (state) => {
         state.forgot.request = true;
       })
-      .addCase(forgotPasswordThunk.fulfilled, (state, action) => {
+      .addCase(forgotPasswordThunk.fulfilled, (state) => {
         state.forgot.request = false;
         state.forgot.success = true;
       })
@@ -32,13 +32,11 @@ const passwordSlice = createSlice({
       .addCase(resetPasswordThunk.pending, (state) => {
         state.reset.request = true;
       })
-      .addCase(resetPasswordThunk.fulfilled, (state, action) => {
-        console.log(action);
+      .addCase(resetPasswordThunk.fulfilled, (state) => {
         state.reset.request = false;
         state.reset.success = true;
       })
-      .addCase(resetPasswordThunk.rejected, (state, action) => {
-        console.log(action);
+      .addCase(resetPasswordThunk.rejected, (state) => {
         state.reset.request = false;
         state.reset.failed = true;
       });

@@ -1,20 +1,32 @@
 import modalStyles from "./modal.module.css";
 import { useEffect, useCallback } from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import { createPortal } from "react-dom";
+import { useHistory } from "react-router-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ModalOverlay } from "../";
+import { ModalOverlay } from "..";
 
 const modalRoot = document.getElementById("react-modals");
 
-export default function Modal({ handleClose, title, children }) {
+export default function Modal({ title, children, handleClose }) {
+  const history = useHistory();
+
+  const handleBack = (e) => {
+    e.stopPropagation();
+    history.goBack();
+  };
+
   const escFunction = useCallback(
     (event) => {
       if (event.key === "Escape") {
-        handleClose(event);
+        if (handleClose) {
+          handleClose(event);
+        } else {
+          handleBack(event);
+        }
       }
     },
-    [handleClose]
+    [handleBack, handleClose]
   );
 
   useEffect(() => {
@@ -25,27 +37,30 @@ export default function Modal({ handleClose, title, children }) {
     };
   }, [escFunction]);
 
-  return ReactDOM.createPortal(
+  return createPortal(
     <>
       <div className={`p-10 ${modalStyles.modal}`}>
         <div className={modalStyles.header}>
           {title ? (
             <h1 className={`text text_type_main-large  ${modalStyles.title}`}>
               {title}
-            </h1> 
+            </h1>
           ) : null}
-          <CloseIcon type='primary' onClick={handleClose} />
+          <CloseIcon
+            type='primary'
+            onClick={handleClose ? handleClose : handleBack}
+          />
         </div>
         {children}
       </div>
-      <ModalOverlay handleClose={handleClose} />
+      <ModalOverlay onClick={handleClose ? handleClose : handleBack} />
     </>,
     modalRoot
   );
 }
 
 Modal.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
   title: PropTypes.string,
   children: PropTypes.element.isRequired,
 };

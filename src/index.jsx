@@ -2,7 +2,7 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import App from "./components/app/app";
+import App from "./components/app";
 import { Api } from "./utils";
 import store from "./services/store";
 import { API, INGREDIENTS, ORDERS, AUTH, PASSWORD_RESET } from "./constants";

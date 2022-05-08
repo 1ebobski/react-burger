@@ -2,10 +2,12 @@ import {
   selectTab,
   changeBun,
   addIngredient,
+  addIngredientDetails,
+  cleanIngredientDetails,
   addBun,
   moveIngredient,
   deleteIngredient,
-  cleanIngredients,
+  removeCounts,
   cleanBurgerConstructor,
 } from "..";
 
@@ -13,9 +15,11 @@ export {
   selectTab,
   changeBun,
   addIngredient,
+  addIngredientDetails,
+  cleanIngredientDetails,
   addBun,
   moveIngredient,
   deleteIngredient,
-  cleanIngredients,
+  removeCounts,
   cleanBurgerConstructor,
 };

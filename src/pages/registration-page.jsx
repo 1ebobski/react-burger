@@ -1,24 +1,17 @@
 import formStyles from "./styles/form.module.css";
-import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   Input,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk, registerThunk } from "../services/auth/thunks";
+import { registerThunk } from "../services/auth/thunks";
 
 export default function RegistrationPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!user) {
-      dispatch(getUserThunk());
-    }
-  }, []);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -32,16 +25,6 @@ export default function RegistrationPage() {
     },
     [dispatch, form]
   );
-
-  if (user) {
-    return (
-      <Redirect
-        to={{
-          pathname: "/",
-        }}
-      />
-    );
-  }
 
   return (
     <form className={formStyles.form} onSubmit={handleSubmit}>

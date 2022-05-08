@@ -1,25 +1,18 @@
 import formStyles from "./styles/form.module.css";
-import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getUserThunk } from "../services/auth/thunks";
 import { forgotPasswordThunk } from "../services/password/thunks";
+import { Loader } from "../components";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!user) {
-      dispatch(getUserThunk());
-    }
-  }, []);
+  const { success, request } = useSelector((store) => store.password.forgot);
 
   const onChange = useCallback(
     (e) => {
@@ -32,22 +25,17 @@ export default function ForgotPasswordPage() {
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     dispatch(forgotPasswordThunk({ email }));
-    history.push({
-      pathname: "/reset-password",
-    });
   });
 
-  if (user) {
-    return (
-      <Redirect
-        to={{
-          pathname: "/",
-        }}
-      />
-    );
-  }
-
-  return (
+  return request ? (
+    <Loader size='large' />
+  ) : success ? (
+    <Redirect
+      to={{
+        pathname: "/reset-password",
+      }}
+    />
+  ) : (
     <form className={formStyles.form} onSubmit={handleSubmit}>
       <h1 className='text text_type_main-medium'>Восстановление пароля</h1>
       <Input

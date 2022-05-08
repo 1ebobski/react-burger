@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
 import draggableContainerStyles from "./draggable-container.module.css";
-import { useDrag, useDrop } from "react-dnd";
 import { useRef } from "react";
+import PropTypes from "prop-types";
+import { useDrag, useDrop } from "react-dnd";
 
 export default function DraggableContainer({
   id,

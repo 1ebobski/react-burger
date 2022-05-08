@@ -3,19 +3,14 @@ import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useHistory } from "react-router-dom";
 
 import {
   BurgerIngredients,
   BurgerConstructor,
   Modal,
-  IngredientDetails,
   OrderDetails,
 } from "../components";
-
-import {
-  addIngredientDetails,
-  cleanIngredientDetails,
-} from "../services/ingredient/actions";
 
 import {
   selectTab,
@@ -23,7 +18,7 @@ import {
   addBun,
   cleanBurgerConstructor,
   deleteIngredient,
-  cleanIngredients,
+  removeCounts,
 } from "../services/burger/actions";
 
 import { cleanOrderData } from "../services/order/actions";
@@ -33,14 +28,15 @@ import fetchIngredientsThunk from "../services/burger/thunks";
 export default function HomePage() {
   const dispatch = useDispatch();
 
-  const { ingredients } = useSelector((store) => store.burger);
+  const history = useHistory();
+
+  const { ingredients, bun, fillingList } = useSelector(
+    (store) => store.burger
+  );
   const ingredientsSuccess = useSelector((store) => store.burger.success);
-
-  const ingredientDetails = useSelector((store) => store.ingredient.details);
-
   const orderSuccess = useSelector((store) => store.order.success);
 
-  const { bun, fillingList } = useSelector((store) => store.burger);
+  const { user } = useSelector((store) => store.auth);
 
   const [modal, setModal] = useState(false);
 
@@ -48,7 +44,7 @@ export default function HomePage() {
     if (!ingredients) {
       dispatch(fetchIngredientsThunk());
     }
-  }, [dispatch]);
+  }, []);
 
   const handleScroll = useCallback(
     (event, scrollRef, bunRef, sauceRef, mainRef) => {
@@ -81,10 +77,10 @@ export default function HomePage() {
     });
   });
 
-  const handleDrop = useCallback(
-    (droppedIngredient) => {
+  const handeIngredientDrop = useCallback(
+    ({ _id }) => {
       const ingredient = ingredients.find(
-        (ing) => ing._id === droppedIngredient._id
+        (ingredient) => ingredient._id === _id
       );
       switch (ingredient.type) {
         case "bun":
@@ -99,7 +95,7 @@ export default function HomePage() {
     [dispatch, ingredients, addBun, addIngredient]
   );
 
-  const handleDelete = useCallback(
+  const handeIngredientDelete = useCallback(
     (event, id, index) => {
       event.preventDefault();
       dispatch(deleteIngredient({ id, index }));
@@ -107,49 +103,28 @@ export default function HomePage() {
     [dispatch, deleteIngredient]
   );
 
-  const createOrder = (event) => {
+  const handleOrderCreate = (event) => {
     event.preventDefault();
-    const ingredientsIds = fillingList
-      .concat(bun)
-      .map((ingredient) => ingredient._id);
-    dispatch(createOrderThunk({ ingredients: ingredientsIds }));
-    setModal(true);
+    if (user) {
+      const ingredientsIds = fillingList
+        .concat(bun)
+        .map((ingredient) => ingredient._id);
+      dispatch(createOrderThunk({ ingredients: ingredientsIds }));
+      setModal(true);
+    } else {
+      history.push({ pathname: "/login" });
+    }
   };
 
-  const closeOrderModal = useCallback(
+  const handleOrderClose = useCallback(
     (event) => {
       event.preventDefault();
       setModal(false);
       dispatch(cleanOrderData());
       dispatch(cleanBurgerConstructor());
-      dispatch(cleanIngredients());
+      dispatch(removeCounts());
     },
-    [
-      dispatch,
-      setModal,
-      cleanOrderData,
-      cleanBurgerConstructor,
-      cleanIngredients,
-    ]
-  );
-
-  const openIngredientModal = (event, id) => {
-    event.preventDefault();
-    setModal(true);
-    dispatch(
-      addIngredientDetails(
-        ingredients.find((ingredient) => ingredient._id === id)
-      )
-    );
-  };
-
-  const closeIngredientModal = useCallback(
-    (event) => {
-      event.preventDefault();
-      setModal(false);
-      dispatch(cleanIngredientDetails());
-    },
-    [dispatch, setModal, cleanIngredientDetails]
+    [dispatch, setModal, cleanOrderData, cleanBurgerConstructor, removeCounts]
   );
 
   return (
@@ -158,25 +133,19 @@ export default function HomePage() {
         {ingredientsSuccess && (
           <main className={`pl-5 pr-5 ${homePageStyles.main}`}>
             <BurgerIngredients
-              openIngredientModal={openIngredientModal}
               onTabClick={handleTabClick}
               onScroll={handleScroll}
             />
             <BurgerConstructor
-              createOrder={createOrder}
-              onDropHandler={handleDrop}
-              onDeleteHandler={handleDelete}
+              onOrderCreate={handleOrderCreate}
+              onIngredientDrop={handeIngredientDrop}
+              onIngredientDelete={handeIngredientDelete}
             />
           </main>
         )}
       </DndProvider>
-      {modal && ingredientDetails && (
-        <Modal handleClose={closeIngredientModal} title={"Детали ингредиента"}>
-          <IngredientDetails />
-        </Modal>
-      )}
       {modal && orderSuccess && (
-        <Modal handleClose={closeOrderModal}>
+        <Modal handleClose={handleOrderClose}>
           <OrderDetails />
         </Modal>
       )}

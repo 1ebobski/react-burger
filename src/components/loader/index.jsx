@@ -7,7 +7,7 @@ const loaderSizes = {
   large: 120,
 };
 const Loader = ({ size, inverse = false }) => {
-  const loaderColor = inverse ? "#fff" : "#3C39EC";
+  const loaderColor = inverse ? "#fff" : "#4c4cff";
 
   const wrapperStyleKey = "wrapper_" + size;
   return (
