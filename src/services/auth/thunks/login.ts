@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../..";
-import { setCookie } from "../../../utils";
 import { TUser } from "../../../types";
+import Cookies from "js-cookie";
 
 const loginThunk = createAsyncThunk(
   "auth/login",
@@ -24,7 +24,7 @@ const loginThunk = createAsyncThunk(
           refreshToken: string;
           user: TUser;
         }): { user: TUser } => {
-          setCookie("accessToken", accessToken);
+          Cookies.set("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
 
           return { user };

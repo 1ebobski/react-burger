@@ -1,6 +1,6 @@
 import { createAsyncThunk, AsyncThunkAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { api } from "../../..";
-import { setCookie } from "../../../utils";
 import { TGetUserAction } from "./get-user";
 
 const refreshTokenThunk = createAsyncThunk(
@@ -14,7 +14,7 @@ const refreshTokenThunk = createAsyncThunk(
       .refreshToken({ token: refreshToken })
       .then((data: { accessToken: string; refreshToken: string }) => {
         const { accessToken, refreshToken } = data;
-        setCookie("accessToken", accessToken);
+        Cookies.set("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         dispatch(afterRefresh);
       })

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { api } from "../../..";
-import { setCookie } from "../../../utils";
 
 const logoutThunk = createAsyncThunk("auth/logout", async (): Promise<void> => {
   return api
@@ -8,7 +8,7 @@ const logoutThunk = createAsyncThunk("auth/logout", async (): Promise<void> => {
       token: localStorage.getItem("refreshToken")!,
     })
     .then(() => {
-      setCookie("accessToken", "");
+      Cookies.set("accessToken", "");
       localStorage.removeItem("refreshToken");
     })
     .catch((err: Error) => {

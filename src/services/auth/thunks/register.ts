@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { api } from "../../..";
 import { TUser } from "../../../types";
-import { setCookie } from "../../../utils";
 
 const registerThunk = createAsyncThunk(
   "auth/register",
@@ -21,7 +21,7 @@ const registerThunk = createAsyncThunk(
         name,
       })
       .then(({ user, accessToken, refreshToken }): { user: TUser } => {
-        setCookie("accessToken", accessToken);
+        Cookies.set("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         return { user };
       })

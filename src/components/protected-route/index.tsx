@@ -11,16 +11,17 @@ export default function ProtectedRoute({
   from = "unauthorized",
   path,
 }: IProtectedRoute): JSX.Element {
-  const { user } = useSelector((store: IStore) => store.auth);
+  const { user, getUser } = useSelector((store: IStore) => store.auth);
+  const { request } = getUser;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user === undefined) {
+    if (user === null) {
       dispatch(getUserThunk());
     }
   }, []);
 
-  return user === undefined ? (
+  return user === null && request ? (
     <Loader size='large' />
   ) : from === "unauthorized" ? (
     <Route

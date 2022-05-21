@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { api } from "../../..";
 import { TUser } from "../../../types";
-import { getCookie } from "../../../utils";
 
 const updateUserThunk = createAsyncThunk(
   "auth/update-user",
@@ -16,7 +16,7 @@ const updateUserThunk = createAsyncThunk(
       .updateUser({
         name,
         email,
-        accessToken: getCookie("accessToken")!,
+        accessToken: Cookies.get("accessToken")!,
       })
       .catch((err) => {
         console.log(err.message);

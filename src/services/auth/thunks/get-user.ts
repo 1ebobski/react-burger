@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../..";
-import { getCookie } from "../../../utils";
+import Cookies from "js-cookie";
 import refreshTokenThunk from "./refresh-token";
 import { TUser } from "../../../types";
 
 const getUserThunk = createAsyncThunk(
   "auth/get-user",
   async (_, { dispatch }): Promise<{ user: TUser } | void> => {
-    const accessToken = getCookie("accessToken");
+    const accessToken = Cookies.get("accessToken");
     if (accessToken === undefined || accessToken === "") {
       return Promise.reject();
     }
