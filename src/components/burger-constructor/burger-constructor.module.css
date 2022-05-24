@@ -37,6 +37,10 @@
   composes: subHeader;
 }
 
+.hover {
+  border-color: red;
+}
+
 /* .ingredient {
   display: flex;
   justify-content: space-between;
