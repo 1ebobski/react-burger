@@ -10,6 +10,7 @@ export default function ProtectedRoute({
   children,
   from = "unauthorized",
   path,
+  exact,
 }: IProtectedRoute): JSX.Element {
   const { user, getUser } = useSelector((store: IStore) => store.auth);
   const { request } = getUser;
@@ -26,6 +27,7 @@ export default function ProtectedRoute({
   ) : from === "unauthorized" ? (
     <Route
       path={path}
+      exact={exact ? exact : undefined}
       render={({ location }) =>
         user ? (
           children
@@ -42,6 +44,7 @@ export default function ProtectedRoute({
   ) : (
     <Route
       path={path}
+      exact={exact ? exact : undefined}
       render={({ location }) =>
         !user ? (
           children

@@ -1,4 +1,4 @@
-import formStyles from "./styles/form.module.css";
+import formStyles from "./styles/form-page.module.css";
 import { useState, useCallback, SyntheticEvent } from "react";
 import { useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";

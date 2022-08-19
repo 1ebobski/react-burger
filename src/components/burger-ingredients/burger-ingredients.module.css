@@ -1,12 +1,9 @@
 .section {
-  /* border: 1px dashed #4c4cff; */
   width: 50%;
 }
 
 .tabs {
   display: flex;
-
-  /* border: 1px dashed #4c4cff; */
 }
 
 .link {
@@ -19,17 +16,10 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-
-  /* border: 1px dashed #4c4cff; */
 }
 
 .scroll {
   overflow-y: scroll;
   position: relative;
-  /* display: flex;
-  align-items: center; */
-
   height: calc(35%);
-
-  /* border: 1px dashed #4c4cff; */
 }

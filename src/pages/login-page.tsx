@@ -1,4 +1,4 @@
-import formStyles from "./styles/form.module.css";
+import formStyles from "./styles/form-page.module.css";
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {

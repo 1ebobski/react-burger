@@ -10,7 +10,7 @@ import {
 
 import appHeaderStyles from "./app-header.module.css";
 
-type TTab = "constructor" | "order-list" | "profile";
+type TTab = "constructor" | "feed" | "profile";
 
 export default function AppHeader(): ReactElement {
   const [tab, setTab] = useState<TTab>("constructor");
@@ -42,13 +42,11 @@ export default function AppHeader(): ReactElement {
           </span>
         </Link>
         <Link
-          to={{ pathname: "/order-list" }}
+          to={{ pathname: "/feed" }}
           className={`mt-4 mb-4 pt-4 pr-5 pb-4 pl-5  ${appHeaderStyles.link}`}>
-          <ListIcon type={tab === "order-list" ? "primary" : "secondary"} />
+          <ListIcon type={tab === "feed" ? "primary" : "secondary"} />
           <span
-            className={`ml-2  ${
-              tab !== "order-list" ? "text_color_inactive" : ""
-            }`}>
+            className={`ml-2  ${tab !== "feed" ? "text_color_inactive" : ""}`}>
             Лента заказов
           </span>
         </Link>

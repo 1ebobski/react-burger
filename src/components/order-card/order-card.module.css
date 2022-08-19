@@ -1,0 +1,53 @@
+.content {
+  display: flex;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #1c1c21;
+  border-radius: 40px;
+  text-decoration: none;
+  position: relative;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredient {
+  width: 64px;
+  height: 64px;
+  margin: -8px;
+  background: #131316;
+  border: #4c4cff solid 2px;
+  border-radius: 100px;
+}
+
+.date {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f2f2f3;
+}
+
+.id {
+  color: #f2f2f3;
+}
+
+.name {
+  color: #f2f2f3;
+}
+
+.status {
+  color: #f2f2f3;
+}

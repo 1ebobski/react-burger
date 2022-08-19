@@ -1,4 +1,4 @@
-import formStyles from "./styles/form.module.css";
+import formStyles from "./styles/form-page.module.css";
 import {
   useState,
   useEffect,

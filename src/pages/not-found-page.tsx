@@ -1,4 +1,4 @@
-import notFoundStyles from "./styles/not-found.module.css";
+import notFoundStyles from "./styles/not-found-page.module.css";
 
 export default function NotFoundPage(): JSX.Element {
   return (

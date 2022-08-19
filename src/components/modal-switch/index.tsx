@@ -9,6 +9,9 @@ import {
   ResetPasswordPage,
   ProfilePage,
   NotFoundPage,
+  OrderPage,
+  OrderHistoryPage,
+  FeedPage,
 } from "../../pages";
 
 interface ILocation extends Location {
@@ -28,6 +31,8 @@ export default function ModalSwitch(): ReactElement {
     <>
       <Switch location={background || location}>
         <Route path='/' exact={true} children={<HomePage />} />
+        <Route path='/feed' exact={true} children={<FeedPage />} />
+        <Route path='/feed:id' exact={true} children={<OrderPage />} />
         <ProtectedRoute
           from='authorized'
           path='/login'
@@ -51,17 +56,41 @@ export default function ModalSwitch(): ReactElement {
         <ProtectedRoute
           from='unauthorized'
           path='/profile'
+          exact={true}
           children={<ProfilePage />}
+        />
+        <ProtectedRoute
+          from='unauthorized'
+          path='/profile/orders'
+          exact={true}
+          children={<OrderHistoryPage />}
+        />
+        <ProtectedRoute
+          from='unauthorized'
+          path='/profile/orders/:id'
+          children={<OrderPage />}
         />
         <Route path='/ingredients/:_id' children={<IngredientDetails />} />
         <Route children={<NotFoundPage />} />
       </Switch>
       {background && (
-        <Route path='/ingredients/:_id'>
-          <Modal>
-            <IngredientDetails />
-          </Modal>
-        </Route>
+        <Switch>
+          <Route path='/ingredients/:_id'>
+            <Modal>
+              <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path='/feed/:orderId'>
+            <Modal>
+              <OrderPage />
+            </Modal>
+          </Route>
+          <Route path='/profile/orders/:orderId'>
+            <Modal>
+              <OrderPage />
+            </Modal>
+          </Route>
+        </Switch>
       )}
     </>
   );

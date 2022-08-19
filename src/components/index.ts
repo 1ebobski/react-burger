@@ -11,6 +11,7 @@ import Modal from "./modal";
 import ModalOverlay from "./modal-overlay";
 import ModalSwitch from "./modal-switch";
 import OrderDetails from "./order-details";
+import OrderCard from "./order-card";
 import ProtectedRoute from "./protected-route";
 
 export {
@@ -27,5 +28,6 @@ export {
   ModalOverlay,
   ModalSwitch,
   OrderDetails,
+  OrderCard,
   ProtectedRoute,
 };

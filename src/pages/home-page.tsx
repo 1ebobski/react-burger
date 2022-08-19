@@ -1,4 +1,4 @@
-import homePageStyles from "./styles/home.module.css";
+import homePageStyles from "./styles/home-page.module.css";
 import {
   useEffect,
   useState,

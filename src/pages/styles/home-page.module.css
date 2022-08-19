@@ -1,25 +1,18 @@
 .app {
   height: 100vh;
   width: 100vw;
-  /* overflow: hidden; */
   overflow-x: hidden;
   color: #f2f2f2;
   background-color: #131316;
-
   margin: 0 auto;
-
-  /* border: 1px dashed #4c4cff; */
   box-sizing: border-box;
 }
 
 .main {
   width: 90%;
   max-width: 1240px;
-
   display: flex;
   justify-content: space-between;
-
-  /* border: 1px dashed #4c4cff; */
   margin: 0 auto;
 }
 

@@ -1,0 +1,43 @@
+.feed {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.orders {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  display: flex;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.ready {
+  color: #00cccc;
+}
+
+/* .stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+} */
+
+.number {
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25),
+    0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.status {
+  width: 50%;
+}
+
+.statusContainer {
+  display: flex;
+  width: 100%;
+}

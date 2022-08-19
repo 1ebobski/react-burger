@@ -1,4 +1,4 @@
-import profileStyles from "./styles/profile.module.css";
+import profileStyles from "./styles/profile-page.module.css";
 import {
   useEffect,
   useState,
@@ -98,7 +98,9 @@ export default function ProfilePage(): JSX.Element {
           <Link to={{ pathname: "/profile" }} className={profileStyles.link}>
             <span>Профиль</span>
           </Link>
-          <Link to={{ pathname: "/profile" }} className={profileStyles.link}>
+          <Link
+            to={{ pathname: "/profile/orders" }}
+            className={profileStyles.link}>
             <span className='text_color_inactive'>История заказов</span>
           </Link>
           <Link
