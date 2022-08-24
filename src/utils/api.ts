@@ -7,8 +7,6 @@ export default class Api {
     this._options = options;
   }
 
-  
-
   async _checkResponse<T>(res: Response): Promise<T> {
     return res.ok
       ? res.json()

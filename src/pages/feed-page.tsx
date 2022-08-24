@@ -1,9 +1,12 @@
 import { OrderCard } from "../components";
 import feedPageStyles from "./styles/feed-page.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { useGetOrdersQuery } from "../services/ws-api";
 
 export default function FeedPage(): JSX.Element {
   const location = useLocation();
+
+  const orders = useGetOrdersQuery("test");
 
   return (
     <>

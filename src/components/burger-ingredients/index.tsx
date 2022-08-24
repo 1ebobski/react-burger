@@ -19,12 +19,10 @@ function BurgerIngredients({ onTabClick, onScroll }: IBurgerIngredients) {
   }
 
   useEffect(() => {
-    // console.log(scrollRef);
     if (scrollRef.current) {
       scrollRef.current.addEventListener("scroll", handleScroll);
     }
     return () => {
-      // console.log(scrollRef);
       if (scrollRef.current) {
         scrollRef.current.removeEventListener("scroll", handleScroll);
       }
@@ -32,6 +30,8 @@ function BurgerIngredients({ onTabClick, onScroll }: IBurgerIngredients) {
   }, [scrollRef.current, bunRef, sauceRef, mainRef]);
 
   const { ingredients, tab } = useSelector((store: IStore) => store.burger);
+
+  // const innerWidth: number = window.innerWidth;
 
   const bunData = ingredients!
     .filter((ingredient: TIngredient): boolean => ingredient.type === "bun")
