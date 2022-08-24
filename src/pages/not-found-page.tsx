@@ -11,11 +11,7 @@ export default function NotFoundPage(): JSX.Element {
   const location = useLocation<ILocation>();
   const { pathname } = location;
 
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
-
-  return pathname !== "/react-burger" ? (
+  return pathname !== "/react-burger/" ? (
     <div className={notFoundStyles.container}>
       <span className='text text_type_digits-large'>404</span>
       <span className='mt-4 text text_type_main-medium'>
