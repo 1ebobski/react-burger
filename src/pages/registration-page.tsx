@@ -1,5 +1,5 @@
 import formStyles from "./styles/form.module.css";
-import { useState, useCallback, SyntheticEvent, ChangeEvent } from "react";
+import { useState, useCallback, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   Input,

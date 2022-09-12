@@ -52,7 +52,7 @@ function BurgerConstructor({
     (dragIndex, hoverIndex) => {
       dispatch(moveIngredient({ dragIndex, hoverIndex }));
     },
-    [dispatch, , moveIngredient]
+    [dispatch]
   );
 
   return (

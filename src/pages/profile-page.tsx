@@ -6,6 +6,7 @@ import {
   useMemo,
   SyntheticEvent,
   FocusEvent,
+  useCallback,
 } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -44,7 +45,7 @@ export default function ProfilePage(): JSX.Element {
     if (user) {
       setForm({ ...user, password: "******" });
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (activeInput) {
@@ -73,22 +74,31 @@ export default function ProfilePage(): JSX.Element {
     setActiveInput(null);
   };
 
-  const handleChange = (e: SyntheticEvent) => {
-    e.preventDefault();
-    const target = e.target as HTMLInputElement;
-    setForm({ ...form, [target.name]: target.value });
-  };
+  const handleChange = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLInputElement;
+      setForm({ ...form, [target.name]: target.value });
+    },
+    [form]
+  );
 
-  const handleExit = (e: SyntheticEvent) => {
-    e.preventDefault();
-    dispatch(logoutThunk());
-  };
+  const handleExit = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      dispatch(logoutThunk());
+    },
+    [dispatch]
+  );
 
-  const updateUser = (e: SyntheticEvent) => {
-    const { name, email } = form;
-    e.preventDefault();
-    dispatch(updateUserThunk({ name, email }));
-  };
+  const updateUser = useCallback(
+    (e: SyntheticEvent) => {
+      const { name, email } = form;
+      e.preventDefault();
+      dispatch(updateUserThunk({ name, email }));
+    },
+    [dispatch, form]
+  );
 
   const content = useMemo(() => {
     return (
@@ -148,7 +158,7 @@ export default function ProfilePage(): JSX.Element {
         </form>
       </div>
     );
-  }, [form, activeInput]);
+  }, [form, activeInput, handleChange, handleExit, updateUser]);
 
   return content;
 }

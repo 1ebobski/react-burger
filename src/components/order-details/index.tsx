@@ -33,6 +33,6 @@ export default function OrderDetails(): JSX.Element {
         </span>
       </>
     );
-  }, [id]);
+  }, [id, request]);
   return content;
 }
