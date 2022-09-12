@@ -1,5 +1,5 @@
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
-import { useEffect, useRef, memo, SyntheticEvent } from "react";
+import { useEffect, useRef, memo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -14,22 +14,25 @@ function BurgerIngredients({ onTabClick, onScroll }: IBurgerIngredients) {
 
   const location = useLocation();
 
-  function handleScroll(this: HTMLDivElement, ev: Event) {
-    onScroll(ev, scrollRef, bunRef, sauceRef, mainRef);
-  }
+  // function handleScroll(this: HTMLDivElement, e: Event) {
+  //   onScroll(e, scrollRef, bunRef, sauceRef, mainRef);
+  // }
 
   useEffect(() => {
-    // console.log(scrollRef);
-    if (scrollRef.current) {
-      scrollRef.current.addEventListener("scroll", handleScroll);
+    const ref = scrollRef.current;
+    if (ref) {
+      ref.addEventListener("scroll", (e) =>
+        onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
+      );
     }
     return () => {
-      // console.log(scrollRef);
-      if (scrollRef.current) {
-        scrollRef.current.removeEventListener("scroll", handleScroll);
+      if (ref) {
+        ref.removeEventListener("scroll", (e) =>
+          onScroll(e, scrollRef, bunRef, sauceRef, mainRef)
+        );
       }
     };
-  }, [scrollRef.current, bunRef, sauceRef, mainRef]);
+  }, [bunRef, sauceRef, mainRef, onScroll]);
 
   const { ingredients, tab } = useSelector((store: IStore) => store.burger);
 

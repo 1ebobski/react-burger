@@ -16,7 +16,6 @@ const getUserThunk = createAsyncThunk(
         accessToken,
       })
       .catch((err: Error): void => {
-        console.log(err.message);
         if (err.message === "jwt expired") {
           dispatch(refreshTokenThunk(getUserThunk()));
         }

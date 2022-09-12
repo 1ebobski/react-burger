@@ -19,7 +19,7 @@ export default function ProtectedRoute({
     if (user === null) {
       dispatch(getUserThunk());
     }
-  }, []);
+  }, [dispatch, user]);
 
   return user === null && request ? (
     <Loader size='large' />

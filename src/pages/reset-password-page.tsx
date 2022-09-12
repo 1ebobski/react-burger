@@ -1,11 +1,5 @@
 import formStyles from "./styles/form.module.css";
-import {
-  useState,
-  useEffect,
-  useCallback,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
+import { useState, useEffect, useCallback, ChangeEvent } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import {
@@ -33,7 +27,7 @@ export default function ResetPasswordPage() {
     if (!requested) {
       history.replace({ pathname: "/forgot-password" });
     }
-  }, []);
+  }, [history, requested]);
 
   const onChange = (e: ChangeEvent): void => {
     e.preventDefault();

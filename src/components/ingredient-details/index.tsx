@@ -18,15 +18,15 @@ export default function IngredientDetails() {
     if (!ingredients) {
       dispatch(fetchIngredientsThunk());
     }
-  }, []);
+  }, [dispatch, ingredients]);
 
   useEffect(() => {
     if (ingredients) dispatch(addIngredientDetails({ _id }));
-  }, [ingredients]);
+  }, [_id, dispatch, ingredients]);
 
   return selected ? (
     <div className={ingredientDetailsStyles.container}>
-      <img src={selected.image_large}></img>
+      <img src={selected.image_large} alt={selected.name}></img>
       <span className='text text_type_main-medium mb-8 mt-4'>
         {selected.name}
       </span>

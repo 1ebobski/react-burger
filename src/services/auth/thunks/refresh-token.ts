@@ -1,4 +1,4 @@
-import { createAsyncThunk, AsyncThunkAction } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { api } from "../../..";
 import { TGetUserAction } from "./get-user";

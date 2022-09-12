@@ -23,7 +23,7 @@ export default function ForgotPasswordPage(): JSX.Element {
       e.preventDefault();
       setEmail(e.target.value);
     },
-    [email]
+    [setEmail]
   );
 
   const handleSubmit = (event: SyntheticEvent) => {

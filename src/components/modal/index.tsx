@@ -11,9 +11,9 @@ const modalRoot: HTMLElement = document.getElementById("react-modals")!;
 export default function Modal({ title, children, handleClose }: IModal) {
   const history = useHistory();
 
-  function handleBack(): void {
+  const handleBack = useCallback((): void => {
     history.goBack();
-  }
+  }, [history]);
 
   const escFunction = useCallback(
     (event: KeyboardEvent & { key: string }): void => {

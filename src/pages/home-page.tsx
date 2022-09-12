@@ -54,7 +54,7 @@ export default function HomePage() {
     if (!ingredients) {
       dispatch(fetchIngredientsThunk());
     }
-  }, []);
+  }, [ingredients, dispatch]);
 
   const handleScroll = useCallback(
     (
@@ -90,7 +90,7 @@ export default function HomePage() {
         }
       }
     },
-    [dispatch, selectTab]
+    [dispatch]
   );
 
   const handleTabClick = (
@@ -122,14 +122,14 @@ export default function HomePage() {
         }
       }
     },
-    [dispatch, ingredients, addBun, addIngredient]
+    [dispatch, ingredients]
   );
 
   const handeIngredientDelete = useCallback(
     ({ id, index }) => {
       dispatch(deleteIngredient({ id, index }));
     },
-    [dispatch, deleteIngredient]
+    [dispatch]
   );
 
   const handleOrderCreate = (event: SyntheticEvent) => {
@@ -150,13 +150,7 @@ export default function HomePage() {
     dispatch(cleanOrderData());
     dispatch(cleanBurgerConstructor());
     dispatch(removeCounts());
-  }, [
-    dispatch,
-    setModal,
-    cleanOrderData,
-    cleanBurgerConstructor,
-    removeCounts,
-  ]);
+  }, [dispatch, setModal]);
 
   return (
     <div className={`pb-10 pt-10 ${homePageStyles.app}`}>

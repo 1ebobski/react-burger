@@ -18,7 +18,7 @@ export default function Ingredient({
           <span className={"text text_type_digits-default"}>{counter}</span>
         </div>
       ) : null}
-      <img className='mr-4 mb-1 ml-4' src={image}></img>
+      <img className='mr-4 mb-1 ml-4' src={image} alt={name}></img>
       <div
         className={`mb-1 text text_type_digits-default ${ingredientStyles.price}`}>
         <span>{price}</span>
