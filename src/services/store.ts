@@ -4,6 +4,7 @@ import authReducer from "./auth";
 import burgerReducer from "./burger";
 import passwordReducer from "./password";
 import orderReducer from "./order";
+import burgerApi from "./api";
 
 const store = configureStore({
   reducer: {
@@ -11,11 +12,15 @@ const store = configureStore({
     burger: burgerReducer,
     order: orderReducer,
     password: passwordReducer,
+    [burgerApi.reducerPath]: burgerApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(burgerApi.middleware),
   devTools: process.env.NODE_ENV !== "production",
   enhancers: [],
 });
+
+console.log(burgerApi);
 
 export default store;
 
