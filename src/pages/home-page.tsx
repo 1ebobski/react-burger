@@ -32,6 +32,7 @@ import { createOrderThunk } from "../services/order/thunks";
 import fetchIngredientsThunk from "../services/burger/thunks";
 import { IStore, TIngredient } from "../types";
 import { useAppDispatch } from "../hooks";
+import { RootState } from "../services/root-reducer";
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ export default function HomePage() {
   const history = useHistory();
 
   const { ingredients, bun, fillingList } = useSelector(
-    (store: IStore) => store.burger
+    (store: RootState) => store.burger
   );
   const ingredientsSuccess = useSelector(
     (store: IStore) => store.burger.success

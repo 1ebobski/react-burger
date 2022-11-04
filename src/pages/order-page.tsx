@@ -11,13 +11,13 @@ export default function OrderPage({
   status = "Готовится",
   ingredients = ["1", "2", "3", "4", "5"],
 }): JSX.Element {
-  const { orders, selected } = useSelector((store: IStore) => store.ordersFeed);
+  // const { orders, selected } = useSelector((store: IStore) => store.ordersFeed);
   const dispatch = useDispatch();
   const { orderId }: { orderId: string } = useParams();
 
-  useEffect(() => {
-    if (orders) dispatch(addOrderDetails({ orderId }));
-  }, [orders]);
+  // useEffect(() => {
+  //   if (orders) dispatch(addOrderDetails({ orderId }));
+  // }, [orders]);
   return (
     <div className={orderPageStyles.container}>
       <span>#{id}</span>

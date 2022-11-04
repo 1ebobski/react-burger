@@ -1,29 +1,28 @@
 import orderCardStyles from "./order-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-
 interface IOrderCard {
-  id?: string;
-  date?: string;
-  name?: string;
+  id: string;
+  number: number;
+  date: string;
+  name: string;
+  status: string;
+  ingredients: { id: string; key: string }[];
   hasStatus: boolean;
-  status?: string;
-  ingredients?: string[];
 }
 
 export default function OrderCard({
-  id = "034535",
-  date = "2 дня назад, 21:53 i-GMT+3",
-  name = "Death Star Starship Main бургер",
-  status = "Готовится",
-  ingredients = ["1", "2", "3", "4", "5"],
+  number,
+  date,
+  name,
+  status,
+  ingredients,
+  hasStatus,
 }: IOrderCard): JSX.Element {
-  
-
   return (
     <div className={`p-6 ${orderCardStyles.card}`}>
       <span className={`text text_type_digits-medium ${orderCardStyles.id}`}>
-        #{id}
+        #{number}
       </span>
       <span
         className={`text text_type_main-default text_color_inactive ${orderCardStyles.date}`}>
@@ -43,7 +42,9 @@ export default function OrderCard({
         <ul className={orderCardStyles.content}>
           {ingredients.map((ingredient) => (
             // <img src={ingredient}></img>
-            <div className={orderCardStyles.ingredient}></div>
+            <div
+              className={orderCardStyles.ingredient}
+              key={ingredient.key}></div>
           ))}
         </ul>
         <span

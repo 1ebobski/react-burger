@@ -1,18 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer, RootState } from "./root-reducer";
 
-import authReducer from "./auth";
-import burgerReducer from "./burger";
-import passwordReducer from "./password";
-import orderReducer from "./order";
+import { socketMiddleware } from "./middleware";
 
 const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    burger: burgerReducer,
-    order: orderReducer,
-    password: passwordReducer,
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      socketMiddleware("wss://norma.nomoreparties.space/orders/all")
+    ),
   devTools: process.env.NODE_ENV !== "production",
   enhancers: [],
 });

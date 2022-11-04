@@ -4,10 +4,22 @@ import { useAppDispatch } from "../hooks";
 import { logoutThunk } from "../services/auth/thunks";
 import { SyntheticEvent } from "react";
 import { OrderCard } from "../components";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { IStore } from "../types";
+import { WS_CONNECTION_START } from "../services/action-types";
 
 export default function OrderHistoryPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const { orders, total, totalToday } = useSelector(
+    (store: IStore) => store.feed
+  );
+
+  useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START });
+  }, []);
 
   const handleExit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -37,15 +49,15 @@ export default function OrderHistoryPage(): JSX.Element {
       </nav>
 
       <ul className={orderHistoryPageStyles.feed}>
-        {[1, 2, 3, 4, 5].map((el) => (
+        {orders.map((order) => (
           <Link
             className={`${orderHistoryPageStyles.card}`}
-            key={el}
+            key={order.id}
             to={{
-              pathname: `profile/orders/${el}`,
+              pathname: `profile/orders/${order.id}`,
               state: { background: location },
             }}>
-            <OrderCard hasStatus={true} />
+            <OrderCard {...order} hasStatus={true} />
           </Link>
         ))}
       </ul>

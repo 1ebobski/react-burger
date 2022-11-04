@@ -11,8 +11,11 @@ import { IProtectedRoute } from "./protected-route";
 import { ILoaderSvg } from "./loader-svg";
 import { TUser } from "./user";
 import { TGetUserAction } from "../services/auth/thunks/get-user";
+import { AppDispatch } from "../services/store";
+import { TOrder } from "./order";
 
 export type {
+  AppDispatch,
   TIngredient,
   IStore,
   IBurgerConstructor,
@@ -26,4 +29,5 @@ export type {
   ILoaderSvg,
   TUser,
   TGetUserAction,
+  TOrder,
 };

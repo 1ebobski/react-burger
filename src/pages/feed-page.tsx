@@ -1,27 +1,42 @@
 import { OrderCard } from "../components";
 import feedPageStyles from "./styles/feed-page.module.css";
 import { Link, useLocation } from "react-router-dom";
-import { useGetOrdersQuery } from "../services/ws-api";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { WS_CONNECTION_START } from "../services/action-types";
+import { IStore } from "../types";
+import { RootState } from "../services/root-reducer";
 
 export default function FeedPage(): JSX.Element {
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  const orders = useGetOrdersQuery("test");
+  const { orders, total, totalToday } = useSelector(
+    (store: IStore) => store.feed
+  );
+
+  useEffect(() => {
+    dispatch({ type: WS_CONNECTION_START });
+  }, []);
+
+  useEffect(() => {
+    console.log(orders[0]);
+  }, [orders]);
 
   return (
     <>
       <h1>Лента заказов</h1>
       <main className={feedPageStyles.main}>
         <ul className={feedPageStyles.feed}>
-          {[1, 2, 3, 4, 5].map((el) => (
+          {orders.map((order) => (
             <Link
               className={feedPageStyles.link}
-              key={el}
+              key={order.id}
               to={{
-                pathname: `/feed/${el}`,
+                pathname: `/feed/${order.id}`,
                 state: { background: location },
               }}>
-              <OrderCard hasStatus={false} />
+              <OrderCard {...order} hasStatus={false} key={order.id}r />
             </Link>
           ))}
         </ul>
@@ -58,7 +73,7 @@ export default function FeedPage(): JSX.Element {
             </h2>
             <p
               className={`text text_type_digits-large ${feedPageStyles.number}`}>
-              28 752
+              {total}
             </p>
           </div>
           <div className={`mt-15 ${feedPageStyles.total}`}>
@@ -67,7 +82,7 @@ export default function FeedPage(): JSX.Element {
             </h2>
             <p
               className={`text text_type_digits-large ${feedPageStyles.number}`}>
-              138
+              {totalToday}
             </p>
           </div>
         </div>

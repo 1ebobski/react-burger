@@ -63,4 +63,10 @@ export interface IStore {
       failed: boolean;
     };
   };
+  feed: {
+    orders: any[];
+    wsConnected: boolean;
+    total: number;
+    totalToday: number;
+  };
 }
